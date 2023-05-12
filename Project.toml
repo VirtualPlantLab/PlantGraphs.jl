@@ -1,0 +1,7 @@
+name = "VPLGraph"
+uuid = "615ad455-9aac-4340-9247-71ef610f781a"
+authors = ["Alejandro Morales Sierra <alejandro.moralessierra@wur.nl> and contributors"]
+version = "0.0.1"
+
+[compat]
+julia = "1.9"
