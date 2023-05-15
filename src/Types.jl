@@ -61,9 +61,6 @@ mutable struct Context{N, G}
   node::N
 end
 
-# Special constructor to propagate missing nodes
-Context(graph, node::Missing) = missing
-
 #=
   StaticGraph
 
@@ -92,10 +89,6 @@ mutable struct Graph{T, S <: Tuple}
     graph::StaticGraph
     rules::S
     vars::T
-end
-
-function Graph(graph::StaticGraph, rules, vars)
-  Graph(graph, rules, vars)
 end
 
 # Docstring is included in the constructor in Rule.jl

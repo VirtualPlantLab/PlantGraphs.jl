@@ -93,6 +93,12 @@ function draw(g::StaticGraph; force = false, inline = false, resolution = (1920,
     f
 end
 
+# Sometimes a StaticGraph is just a node...
+function draw(n::Node; kwargs...) 
+    println("The graph only has one node, so no visualization was made")
+    return nothing
+end
+
 """
     draw(g::Graph; force = false, inline = false, 
          resolution = (1920, 1080), nlabels_textsize = 15, arrow_size = 15, 
