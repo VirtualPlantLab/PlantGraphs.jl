@@ -69,15 +69,15 @@ data(c::Context)
 ## Node relations
 
 ```@docs
-hasParent(c::Context)
+has_parent(c::Context)
 ```
 
 ```@docs
-isRoot(c::Context)
+is_root(c::Context)
 ```
 
 ```@docs
-hasAncestor(c::Context; condition = x -> true, maxlevel::Int = typemax(Int))
+has_ancestor(c::Context; condition = x -> true, maxlevel::Int = typemax(Int))
 ```
 
 ```@docs
@@ -89,15 +89,15 @@ ancestor(c::Context; condition = x -> true, maxlevel::Int = typemax(Int))
 ```
 
 ```@docs
-hasChildren(c::Context)
+has_children(c::Context)
 ```
 
 ```@docs
-isLeaf(c::Context)
+is_leaf(c::Context)
 ```
 
 ```@docs
-hasDescendent(c::Context; condition = x -> true, maxlevel::Int = typemax(Int))
+has_descendent(c::Context; condition = x -> true, maxlevel::Int = typemax(Int))
 ```
 
 ```@docs
@@ -115,11 +115,11 @@ traverse(g::Graph; fun = () -> nothing)
 ```
 
 ```@docs
-traverseDFS(g::Graph; fun = () -> nothing, ID = root(g))
+traverse_dfs(g::Graph; fun = () -> nothing, ID = root(g))
 ```
 
 ```@docs
-traverseBFS(g::Graph; fun = () -> nothing, ID = root(g))
+traverse_bfs(g::Graph; fun = () -> nothing, ID = root(g))
 ```
 
 ## Graph visualization
@@ -133,7 +133,6 @@ node_label(n::Node, id)
 ```
 
 ```@docs
-calculate_resolution(;width = 1024/300*2.54, height = 768/300*2.54, 
+calculate_resolution(;width = 1024/300*2.54, height = 768/300*2.54,
                               format = "png", dpi = 300)
 ```
-

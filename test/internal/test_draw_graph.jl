@@ -7,9 +7,9 @@ import Graphs
 
 let
     ## Static graph
-    n = [GT.bar(i) for i = 1:6]
+    n = [GT.bar(i) for i in 1:6]
     g = n[1] + n[2] + (n[3], n[4] + n[5]) + n[6]
-    
+
     # DOT version of graph 
     digraph, labels, n = Graphs.DiGraph(g)
     @test digraph isa Graphs.SimpleGraphs.SimpleDiGraph

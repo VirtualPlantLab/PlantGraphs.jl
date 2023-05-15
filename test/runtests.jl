@@ -22,4 +22,3 @@ end
 @testset "API/Graph_6" begin include("api/test_graph_6.jl") end
 @testset "API/Graph_parallel" begin include("api/test_graph_parallel.jl") end
 @testset "API/Draw" begin include("api/test_draw_graph.jl") end
-

@@ -2,41 +2,40 @@ import VPLGraph as V
 using Test
 
 let
-# Test GraphNode construction
-n = V.GraphNode(1)
+    # Test GraphNode construction
+    n = V.GraphNode(1)
 
-# Check that this returns the correct type
-@test n isa V.GraphNode
-@test !isimmutable(n)
+    # Check that this returns the correct type
+    @test n isa V.GraphNode
+    @test !isimmutable(n)
 
-# Check deafult constructor
-@test ismissing(V.parentID(n))
-@test isempty(V.childrenID(n))
+    # Check deafult constructor
+    @test ismissing(V.parent_id(n))
+    @test isempty(V.children_id(n))
 
-# Add connections
-V.addChild!(n,1)
-@test length(V.childrenID(n)) == 1 && first(V.childrenID(n)) == 1
-V.setParent!(n,2)
-@test V.parentID(n) == 2
+    # Add connections
+    V.add_child!(n, 1)
+    @test length(V.children_id(n)) == 1 && first(V.children_id(n)) == 1
+    V.set_parent!(n, 2)
+    @test V.parent_id(n) == 2
 
-# Create a copy of the node
-n2 = copy(n)
+    # Create a copy of the node
+    n2 = copy(n)
 
-# Remove connections
-V.removeChild!(n,1)
-@test isempty(V.childrenID(n))
-V.removeParent!(n)
-@test ismissing(V.parentID(n))
+    # Remove connections
+    V.remove_child!(n, 1)
+    @test isempty(V.children_id(n))
+    V.remove_parent!(n)
+    @test ismissing(V.parent_id(n))
 
-# The resulting node should be root and leaf
-@test V.isLeaf(n)
-@test V.isRoot(n)
+    # The resulting node should be root and leaf
+    @test V.is_leaf(n)
+    @test V.is_root(n)
 
-# Retrieve data stored inside the node
-@test V.data(n) === 1
+    # Retrieve data stored inside the node
+    @test V.data(n) === 1
 
-# Make sure that the copied node was independent
-@test V.hasChildren(n2)
-@test V.hasParent(n2)
-
+    # Make sure that the copied node was independent
+    @test V.has_children(n2)
+    @test V.has_parent(n2)
 end

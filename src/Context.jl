@@ -1,6 +1,5 @@
 ### This file contains public API ###
 
-
 ################################################################################
 ################################## Getters #####################################
 ################################################################################
@@ -11,86 +10,87 @@ node(c::Context) = c.node
 """
     data(c::Context)
 
-Returns the data stored in a node. Intended to be used within a rule or query. 
+Returns the data stored in a node. Intended to be used within a rule or query.
 """
 data(c::Context) = data(node(c))
 
-# Return the Graph and StaticGraph stored inside the Context object
+# Return the StaticGraph stored inside the Context object
 graph(c::Context) = c.graph
-sgraph(c::Context) = graph(c.graph)
 
 """
     vars(c::Context)
 
-Returns the graph-level variables. Intended to be used within a rule or query. 
+Returns the graph-level variables. Intended to be used within a rule or query.
 """
 vars(c::Context) = vars(graph(c))
 
 # This is needed to traverse graphs within rules
-id(c::Context) = selfID(node(c))
+id(c::Context) = self_id(node(c))
 
 ################################################################################
 ################################## Queries #####################################
 ################################################################################
 
 """
-    hasParent(c::Context)
+    has_parent(c::Context)
 
-Check if a node has a parent and return `true` or `false`. Intended to be used 
-within a rule or query. 
+Check if a node has a parent and return `true` or `false`. Intended to be used
+within a rule or query.
 """
-hasParent(c::Context) = hasParent(node(c))
-
-"""
-    isRoot(c::Context)
-
-Check if a node is the root of the graph (i.e., has no parent) and return `true` or 
-`false`. Intended to be used within a rule or query. 
-"""
-isRoot(c::Context) = !hasParent(c)
+has_parent(c::Context) = has_parent(node(c))
 
 """
-    hasAncestor(c::Context; condition = x -> true, maxlevel::Int = typemax(Int))
+    is_root(c::Context)
 
-Check if a node has an ancestor that matches the condition. Intended to be used within 
-a rule or query. 
+Check if a node is the root of the graph (i.e., has no parent) and return `true` or
+`false`. Intended to be used within a rule or query.
+"""
+is_root(c::Context) = !has_parent(c)
+
+"""
+    has_ancestor(c::Context; condition = x -> true, max_level::Int = typemax(Int))
+
+Check if a node has an ancestor that matches the condition. Intended to be used within
+a rule or query.
 
 ## Arguments
 - `c::Context`: Context associated to a node in a dynamic graph.
-- `condition`: An user-defined function that takes a `Context` object as input 
-and returns `true` or `false`. It is assigned by the user by keyword.
-- `maxlevel::Int`: Maximum number of steps that the algorithm may take when
+
+## Keywords
+- `condition`: An user-defined function that takes a `Context` object as input
+and returns `true` or `false`.
+- `max_level::Int`: Maximum number of steps that the algorithm may take when
 traversing the graph.
 
 ## Details
-This function traverses the graph from the node associated to `c` towards the 
+This function traverses the graph from the node associated to `c` towards the
 root of the graph until a node is found for which `condition` returns `true`. If
-no node meets the condition, then it will return `false`. The defaults values 
-for this function are such that the algorithm always returns `true` 
-after one step (unless it is applied to the root node) in which case it is 
-equivalent to calling `hasParent` on the node.
+no node meets the condition, then it will return `false`. The defaults values
+for this function are such that the algorithm always returns `true`
+after one step (unless it is applied to the root node) in which case it is
+equivalent to calling `has_parent` on the node.
 
 The number of levels that the algorithm is allowed to traverse is capped by
-`maxlevel` (mostly to avoid excessive computation, though the user may want to
+`max_level` (mostly to avoid excessive computation, though the user may want to
 specify a meaningful limit based on the topology of the graphs being used).
 
 The function `condition` should take an object of type `Context` as input and
 return `true` or `false`.
 
-## Return
-Return a tuple with two values a `Bool` and an `Int`, the boolean indicating 
-whether the node has an ancestor meeting the condition, the integer indicating 
+## Returns
+Return a tuple with two values a `Bool` and an `Int`, the boolean indicating
+whether the node has an ancestor meeting the condition, the integer indicating
 the number of levels in the graph separating the node an its ancestor.
 
 ## Examples
-```julia
+```jldoctest
 let
     struct A1 <: Node val::Int end
     struct B1 <: Node val::Int end
     axiom = A1(2) + (B1(1) + A1(3), B1(4))
     g = Graph(axiom = axiom)
     function qfun(n)
-        hasAncestor(n, condition = x -> data(x).val == 1)[1]
+        has_ancestor(n, condition = x -> data(x).val == 1)[1]
     end
     Q1 = Query(A1, query = qfun)
     R1 = apply(g, Q1)
@@ -100,69 +100,71 @@ let
 end
 ```
 """
-function hasAncestor(c::Context; condition = x -> true, maxlevel::Int = typemax(Int))
-    hasAncestor(node(c), graph(c), condition, maxlevel, 1)
+function has_ancestor(c::Context; condition = x -> true, max_level::Int = typemax(Int))
+    out = has_ancestor(node(c), graph(c), condition, max_level, 1)
+    return out
 end
 
-
 """
-    hasChildren(c::Context)
+    has_children(c::Context)
 
 Check if a node has at least one child and return `true` or `false`. Intended to be used
-within a rule or query. 
+within a rule or query.
 """
-hasChildren(c::Context) = hasChildren(node(c))
+has_children(c::Context) = has_children(node(c))
 
 """
-    isLeaf(c::Context)
+    is_leaf(c::Context)
 
-Check if a node is a leaf in the graph (i.e., has no children) and return `true` or 
-`false`. Intended to be used within a rule or query. 
+Check if a node is a leaf in the graph (i.e., has no children) and return `true` or
+`false`. Intended to be used within a rule or query.
 """
-isLeaf(c::Context) = !hasChildren(c)
+is_leaf(c::Context) = !has_children(c)
 
 """
-    hasDescendent(c::Context; condition = x -> true, maxlevel::Int = typemax(Int))
+    has_descendent(c::Context; condition = x -> true, max_level::Int = typemax(Int))
 
-Check if a node has a descendent that matches the optional condition. Intended to be used 
-within a rule or query. 
+Check if a node has a descendent that matches the optional condition. Intended to be used
+within a rule or query.
 
 ## Arguments
 - `c::Context`: Context associated to a node in a dynamic graph.
-- `condition`: An user-defined function that takes a `Context` object as input 
-and returns `true` or `false`. It is assigned by the user by keyword.
-- `maxlevel::Int`: Maximum number of steps that the algorithm may take when
+
+## Keywords
+- `condition`: An user-defined function that takes a `Context` object as input
+and returns `true` or `false`.
+- `max_level::Int`: Maximum number of steps that the algorithm may take when
 traversing the graph.
 
 ## Details
-This function traverses the graph from the node associated to `c` towards the 
-leaves of the graph until a node is found for which `condition` returns `true`. 
-If no node meets the condition, then it will return `false`. The defaults values 
-for this function are such that the algorithm always returns `true` 
-after one step (unless it is applied to a leaf node) in which case it is 
-equivalent to calling `hasChildren` on the node.
+This function traverses the graph from the node associated to `c` towards the
+leaves of the graph until a node is found for which `condition` returns `true`.
+If no node meets the condition, then it will return `false`. The defaults values
+for this function are such that the algorithm always returns `true`
+after one step (unless it is applied to a leaf node) in which case it is
+equivalent to calling `has_children` on the node.
 
 The number of levels that the algorithm is allowed to traverse is capped by
-`maxlevel` (mostly to avoid excessive computation, though the user may want to
+`max_level` (mostly to avoid excessive computation, though the user may want to
 specify a meaningful limit based on the topology of the graphs being used).
 
 The function `condition` should take an object of type `Context` as input and
 return `true` or `false`.
 
-## Return
-Return a tuple with two values a `Bool` and an `Int`, the boolean indicating 
-whether the node has an ancestor meeting the condition, the integer indicating 
+## Returns
+Return a tuple with two values a `Bool` and an `Int`, the boolean indicating
+whether the node has an ancestor meeting the condition, the integer indicating
 the number of levels in the graph separating the node an its ancestor.
 
 ## Examples
-```julia
+```jldoctest
 let
     struct A1 <: Node val::Int end
     struct B1 <: Node val::Int end
     axiom = A1(2) + (B1(1) + A1(3), B1(4))
     g = Graph(axiom = axiom)
     function qfun(n)
-        hasDescendent(n, condition = x -> data(x).val == 1)[1]
+        has_descendent(n, condition = x -> data(x).val == 1)[1]
     end
     Q1 = Query(A1, query = qfun)
     R1 = apply(g, Q1)
@@ -172,8 +174,9 @@ let
 end
 ```
 """
-function hasDescendent(c::Context; condition = x -> true, maxlevel::Int = typemax(Int))
-    hasDescendent(node(c), graph(c), condition, maxlevel, 1)
+function has_descendent(c::Context; condition = x -> true, max_level::Int = typemax(Int))
+    out = has_descendent(node(c), graph(c), condition, max_level, 1)
+    return out
 end
 
 ################################################################################
@@ -184,18 +187,24 @@ end
     parent(c::Context; nsteps::Int)
 
 Returns the parent of a node that is `nsteps` away towards the root of the graph.
-Intended to be used within a rule or query. 
+Intended to be used within a rule or query.
+
+## Arguments
+- `c::Context`: Context associated to a node in a dynamic graph.
+
+## Keywords
+- `nsteps`: Number of steps to traverse the graph towards the root node.
 
 ## Details
-If `hasParent()` returns `false` for the same node or the algorithm has reached
-the root node but `nsteps` have not been reached, then `parent()` will return 
+If `has_parent()` returns `false` for the same node or the algorithm has reached
+the root node but `nsteps` have not been reached, then `parent()` will return
 `missing`, otherwise it returns the `Context` associated to the matching node.
 
 ## Return
 Return a `Context` object or `missing`.
 
 ## Examples
-```julia
+```jldoctest
 let
     struct A1 <: Node val::Int end
     struct B1 <: Node val::Int end
@@ -214,25 +223,35 @@ end
 ```
 """
 function parent(c::Context; nsteps::Int = 1)
-    Context(graph(c), parent(node(c), graph(c), nsteps))
+    out = Context(graph(c), parent(node(c), graph(c), nsteps))
+    return out
 end
 
 """
-    ancestor(c::Context; condition = x -> true, maxlevel::Int = typemax(Int))
+    ancestor(c::Context; condition = x -> true, max_level::Int = typemax(Int))
 
-Returns the first ancestor of a node that matches the `condition`. Intended to be 
-used within a rule or query. 
+Returns the first ancestor of a node that matches the `condition`. Intended to be
+used within a rule or query.
+
+## Arguments
+- `c::Context`: Context associated to a node in a dynamic graph.
+
+## Keywords
+- `condition`: An user-defined function that takes a `Context` object as input
+and returns `true` or `false`.
+- `max_level::Int`: Maximum number of steps that the algorithm may take when
+traversing the graph.
 
 ## Details
-If `hasAncestor()` returns `false` for the same node and `condition`, `ancestor()`
-will return `missing`, otherwise it returns the `Context` associated to the 
+If `has_ancestor()` returns `false` for the same node and `condition`, `ancestor()`
+will return `missing`, otherwise it returns the `Context` associated to the
 matching node
 
-## Return
+## Returns
 Return a `Context` object or `missing`.
 
 ## Examples
-```julia
+```jldoctest
 let
     struct A1 <: Node val::Int end
     struct B1 <: Node val::Int end
@@ -254,9 +273,10 @@ let
 end
 ```
 """
-function ancestor(c::Context; condition = x -> true, maxlevel::Int = typemax(Int))
-    anc = ancestor(node(c), graph(c), condition, maxlevel, 1)
-    Context(graph(c), anc)
+function ancestor(c::Context; condition = x -> true, max_level::Int = typemax(Int))
+    anc = ancestor(node(c), graph(c), condition, max_level, 1)
+    out = Context(graph(c), anc)
+    return out
 end
 
 """
@@ -265,26 +285,35 @@ end
 Returns all the children of a node as `Context` objects.
 """
 function children(c::Context)
-    Tuple(Context(graph(c), child) for child in children(node(c), graph(c)))
+    out = Tuple(Context(graph(c), child) for child in children(node(c), graph(c)))
+    return out
 end
 
 """
-    descendent(c::Context; condition = x -> true, maxlevel::Int = typemax(Int))
+    descendent(c::Context; condition = x -> true, max_level::Int = typemax(Int))
 
-Returns the first descendent of a node that matches the `condition`. Intended to 
-be used within a rule or query. 
+Returns the first descendent of a node that matches the `condition`. Intended to
+be used within a rule or query.
+
+## Arguments
+- `c::Context`: Context associated to a node in a dynamic graph.
+
+## Keywords
+- `condition`: An user-defined function that takes a `Context` object as input
+and returns `true` or `false`.
+- `max_level::Int`: Maximum number of steps that the algorithm may take when
+traversing the graph.
 
 ## Details
-
-If `hasDescendent()` returns `false` for the same node and `condition`, 
-`descendent()` will return `missing`, otherwise it returns the `Context` 
+If `has_descendent()` returns `false` for the same node and `condition`,
+`descendent()` will return `missing`, otherwise it returns the `Context`
 associated to the matching node.
 
 ## Return
 Return a `Context` object or `missing`.
 
 ## Examples
-```julia
+```jldoctest
 let
     struct A1 <: Node val::Int end
     struct B1 <: Node val::Int end
@@ -306,7 +335,8 @@ let
 end
 ```
 """
-function descendent(c::Context; condition = x -> true, maxlevel::Int = typemax(Int))
-    desc = descendent(node(c), graph(c), condition, maxlevel, 1)
-    Context(graph(c), desc)
+function descendent(c::Context; condition = x -> true, max_level::Int = typemax(Int))
+    desc = descendent(node(c), graph(c), condition, max_level, 1)
+    out = Context(graph(c), desc)
+    return out
 end

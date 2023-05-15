@@ -11,9 +11,9 @@ GraphNode(data) = GraphNode(data, Set{Int}(), missing, -1)
 ################################################################################
 
 data(n::GraphNode) = n.data
-parentID(n::GraphNode) = n.parentID
-childrenID(n::GraphNode) = n.childrenID
-selfID(n::GraphNode) = n.selfID
+parent_id(n::GraphNode) = n.parent_id
+children_id(n::GraphNode) = n.children_id
+self_id(n::GraphNode) = n.self_id
 
 ################################################################################
 ################################## Setters #####################################
@@ -21,11 +21,11 @@ selfID(n::GraphNode) = n.selfID
 
 # The methods taking Missing as input are needed to simply operations on root nodes
 
-setParent!(n::GraphNode, id) = n.parentID = id
-removeParent!(n::GraphNode) = n.parentID = missing
-removeChild!(n::GraphNode, id) = delete!(n.childrenID, id)
-addChild!(n::GraphNode, id) = push!(n.childrenID, id)
-changeID!(n::GraphNode, id::Int) = n.selfID = id
+set_parent!(n::GraphNode, id) = n.parent_id = id
+remove_parent!(n::GraphNode) = n.parent_id = missing
+remove_child!(n::GraphNode, id) = delete!(n.children_id, id)
+add_child!(n::GraphNode, id) = push!(n.children_id, id)
+change_id!(n::GraphNode, id::Int) = n.self_id = id
 
 ################################################################################
 ################################## Queries #####################################
@@ -35,18 +35,18 @@ changeID!(n::GraphNode, id::Int) = n.selfID = id
  Check if GraphNode has a parent or a ancestor that fits a query with optional
  recursive search (with maximum depth)
 =#
-hasParent(n::GraphNode) = !ismissing(n.parentID)
-isRoot(n::GraphNode) = !hasParent(n)
+has_parent(n::GraphNode) = !ismissing(n.parent_id)
+is_root(n::GraphNode) = !has_parent(n)
 
-function hasAncestor(node::GraphNode, g::Graph, condition, maxlevel::Int,
-                     level::Int = 1)                 
-    root(g) == selfID(node) && return false, level
+function has_ancestor(node::GraphNode, g::Graph, condition, maxlevel::Int,
+                      level::Int = 1)
+    root(g) == self_id(node) && return false, level
     par = parent(node, g)
     if condition(Context(g, par))
         return true, level
     else
         if level < maxlevel
-            check, steps = hasAncestor(par, g, condition, maxlevel, level + 1)
+            check, steps = has_ancestor(par, g, condition, maxlevel, level + 1)
             check && return true, steps
         end
     end
@@ -57,17 +57,17 @@ end
  Check if GraphNode has a child or a descendent that fits a condition with optional
  recursive search (with maximum depth)
 =#
-hasChildren(n::GraphNode) = !isempty(n.childrenID)
-isLeaf(n::GraphNode) = !hasChildren(n)
+has_children(n::GraphNode) = !isempty(n.children_id)
+is_leaf(n::GraphNode) = !has_children(n)
 
-function hasDescendent(node::GraphNode, g::Graph, condition, maxlevel::Int,
-                       level::Int = 1)
+function has_descendent(node::GraphNode, g::Graph, condition, maxlevel::Int,
+                        level::Int = 1)
     for child in children(node, g)
         if condition(Context(g, child))
             return true, level
         else
             if level <= maxlevel
-                if hasDescendent(child, g, condition, maxlevel, level + 1)[1]
+                if has_descendent(child, g, condition, maxlevel, level + 1)[1]
                     return true, level + 1
                 end
             end
@@ -75,7 +75,6 @@ function hasDescendent(node::GraphNode, g::Graph, condition, maxlevel::Int,
     end
     return false, 0
 end
-
 
 ################################################################################
 ################################## Retrieve ####################################
@@ -86,22 +85,21 @@ end
  recursive search (with maximum depth)
 =#
 function parent(n::GraphNode, g::Graph, nsteps::Int = 1)
-    isRoot(n) && (return missing) 
-    if(nsteps == 1)
-        g[parentID(n)]
+    is_root(n) && (return missing)
+    if (nsteps == 1)
+        out = g[parent_id(n)]
     else
-        ancestor(n, g, x -> false, nsteps)
+        out = ancestor(n, g, x -> false, nsteps)
     end
+    return out
 end
 
 # This method is useful for pruning and other static graph operations
-function parent(n::GraphNode, g::StaticGraph) 
-     g[parentID(n)]
-end
+parent(n::GraphNode, g::StaticGraph) = g[parent_id(n)]
 
 function ancestor(node::GraphNode, g::Graph, condition, maxlevel::Int,
                   level::Int = 1)
-    isRoot(node) && (return missing)
+    is_root(node) && (return missing)
     par = parent(node, g)
     if condition(Context(g, par))
         return par
@@ -111,12 +109,11 @@ function ancestor(node::GraphNode, g::Graph, condition, maxlevel::Int,
     return par # A neat trick to select an ancestor nsteps away (used by parent)
 end
 
-
 #=
  Retrieve the children GraphNode or a descendent that fits a condition with optional
  recursive search (with maximum depth)
 =#
-children(n::GraphNode, g::StaticGraph) = (g[id] for id in childrenID(n))
+children(n::GraphNode, g::StaticGraph) = (g[id] for id in children_id(n))
 
 function descendent(node::GraphNode, g::Graph, condition, maxlevel::Int,
                     level::Int = 1)
@@ -124,12 +121,11 @@ function descendent(node::GraphNode, g::Graph, condition, maxlevel::Int,
         if condition(Context(g, child))
             return child
         elseif level <= maxlevel
-                return descendent(child, g, condition, maxlevel, level + 1)
+            return descendent(child, g, condition, maxlevel, level + 1)
         end
     end
     return missing # This means we tested on a leaf node
 end
-
 
 ################################################################################
 #################################### Copy ######################################
@@ -138,7 +134,7 @@ end
 #=
     copy(n::GraphNode)
 Creates a new GraphNode with the same contents as `n`. A reference to the data is kept,
-but childrenID and parentID are copied. This necessary for rules that reuse a node
+but children_id and parent_id are copied. This necessary for rules that reuse a node
 on the right hand side
 =#
-copy(n::GraphNode) = GraphNode(n.data, copy(childrenID(n)), parentID(n), selfID(n))
+copy(n::GraphNode) = GraphNode(n.data, copy(children_id(n)), parent_id(n), self_id(n))

@@ -1,11 +1,10 @@
 module VPLGraph
 
 # Public API of VPLGraph
-export Node, Graph, Rule, Query, rewrite!, apply, vars, rules, graph, data, 
-       hasParent, hasAncestor, ancestor, isRoot, hasChildren, hasDescendent, 
-       children, descendent, isLeaf, traverse, traverseDFS, traverseBFS, draw, 
+export Node, Graph, Rule, Query, rewrite!, apply, vars, rules, graph, data,
+       has_parent, has_ancestor, ancestor, is_root, has_children, has_descendent,
+       children, descendent, is_leaf, traverse, traverse_dfs, traverse_bfs, draw,
        calculate_resolution, node_label
-
 
 # Base functions that will be extended
 import Base: copy, length, empty!, append!, +, getindex, setindex!, show, parent,

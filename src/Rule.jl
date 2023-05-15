@@ -10,12 +10,14 @@
 Create a replacement rule for nodes of type `nodetype`.
 
 ## Arguments
-- `nodetype`: Type of node to be matched.  
-- `lhs`: Function or function-like object that takes a `Context` object and 
+- `nodetype`: Type of node to be matched.
+
+## Keywords
+- `lhs`: Function or function-like object that takes a `Context` object and
 returns whether the node should be replaced or not (with `true` or `false`).
 - `rhs`: Function or function-like object that takes one or more `Context`
-objects and returns a replacement graph or `nothing`. If it takes several 
-inputs, the first one will correspond to the node being replaced.  
+objects and returns a replacement graph or `nothing`. If it takes several
+inputs, the first one will correspond to the node being replaced.
 - `captures`: Either `false` or `true` to indicate whether the left-hand side
 of the rule is capturing nodes in the context of the replacement node to be
 used for the construction of the replace graph.
@@ -27,7 +29,7 @@ See VPL documentation for details on rule-based graph rewriting.
 An object of type `Rule`.
 
 ## Examples
-```julia
+```jldoctest
 let
     struct A <: Node end
     struct B <: Node end
@@ -38,10 +40,13 @@ let
 end
 ```
 """
-Rule(nodetype::DataType; lhs = x -> true, rhs = x -> nothing, captures::Bool = false) =
-  Rule{nodetype, captures, typeof(lhs), typeof(rhs)}(lhs, rhs, Int[], Tuple[])
+function Rule(nodetype::DataType; lhs = x -> true, rhs = x -> nothing,
+              captures::Bool = false)
+    r = Rule{nodetype, captures, typeof(lhs), typeof(rhs)}(lhs, rhs, Int[], Tuple[])
+    return r
+end
 
-  # Remove the matches and contexts stored in a rule
+# Remove the matches and contexts stored in a rule
 function empty!(rule::Rule)
     empty!(rule.matched)
     empty!(rule.contexts)
@@ -60,16 +65,16 @@ Tuple(r::Rule) = (r,)
 ##############################  Show methods  ##################################
 ################################################################################
 
-
 #=
   Print human-friendly description of a rule
 =#
 function show(io::IO, rule::Rule{N, LHST, RHST}) where {N, LHST, RHST}
-  if captures(rule)
-    println(io, "Rule replacing nodes of type ", N, " with context capturing.")
-  else
-    println(io, "Rule replacing nodes of type ", N, " without context capturing.")
-  end
+    if captures(rule)
+        println(io, "Rule replacing nodes of type ", N, " with context capturing.")
+    else
+        println(io, "Rule replacing nodes of type ", N, " without context capturing.")
+    end
+    return nothing
 end
 
 ################################################################################
@@ -82,7 +87,7 @@ end
   The function checks that no node is matched by more than one rule as that
   breaks the conceptual parallelism of graph rewriting.
 =#
-function matchRule!(rule::Rule, node::Context, assigned)
+function match_rule!(rule::Rule, node::Context, assigned)
     if captures(rule)
         match, con = rule.lhs(node)
     else
@@ -91,7 +96,8 @@ function matchRule!(rule::Rule, node::Context, assigned)
     end
     if match
         nid = id(node)
-        nid in assigned && error("GraphNode with id $nid was matched by more than one rule")
+        nid in assigned &&
+           Throw(ErrorException("GraphNode with id $nid was matched by more than one rule"))
         push!(rule.matched, nid)
         push!(assigned, nid)
         push!(rule.contexts, con)
@@ -102,33 +108,33 @@ end
 #=
     Match a rule against a graph to identify which nodes will be replaced.
 =#
-function matchRule!(g::Graph, rule::Rule, assigned::Set{Int})
+function match_rule!(g::Graph, rule::Rule, assigned::Set{Int})
     # Reset the rule
     empty!(rule)
     N = nodetype(rule)
     # Extract candidates based on nodetype
-    if hasNodetype(g.graph, N)
+    if has_nodetype(g.graph, N)
         candidates = g.graph.nodetypes[N]
         # Loop over the candidates and store those that match the lhs
         for id in candidates
-            matchRule!(rule, Context(g, g[id]), assigned)
+            match_rule!(rule, Context(g, g[id]), assigned)
         end
     end
+    return nothing
 end
 
 #=
   Match all the rules of a dynamic graph against its internal graph
   Rules is needed as argument of the function in order for @unroll to work
 =#
-@inline @unroll function matchRules!(g::Graph, rules)
+@inline @unroll function match_rules!(g::Graph, rules)
     assigned = Set{Int}()
     # For each rule, match the nodes that meet the conditions of the query
     @unroll for rule in rules
-        matchRule!(g, rule, assigned)
+        match_rule!(g, rule, assigned)
     end
     return nothing
 end
-
 
 #=
   Execute a rule by replacing or pruning for every node previously matched.
@@ -144,10 +150,9 @@ end
     return nothing
 end
 
-
 @unroll function rewrite!(g::Graph, rules)
     # Match nodes to rules and check for duplicates
-    matchRules!(g, rules)
+    match_rules!(g, rules)
     # Execute the rules creating a new graph
     @unroll for rule in rules
         execute!(g, rule)
@@ -168,17 +173,17 @@ This function will match the left-hand sides of all the rules in a graph. If any
 node is matched by more than one rule this will result in an error. The rules
 are then applied in order to replaced the matched nodes with the result of
 executing the right hand side of the rules. The rules are applied in the order
-in which they are stored in the graph but the order in which the nodes are 
+in which they are stored in the graph but the order in which the nodes are
 processed is not defined. Since graph rewriting is semantically a parallel
-process, the rules should not be rely on any particular order for their 
+process, the rules should not be rely on any particular order for their
 functioning.
 
 ## Returns
 This function returns `nothing`, but the graph passed as input will be modified
 by the execution of the rules.
 
-# Example
-```julia
+# Examples
+```jldoctest
 let
     struct A <: Node end
     struct B <: Node end

@@ -5,30 +5,32 @@
 ################################################################################
 
 """
-    Query(nodetype::DataType; condition = x -> true)
+    Query(N::DataType; condition = x -> true)
 
 Create a query that matches nodes of type `nodetype` and a `condition`.
 
 ## Arguments
-- `nodetype::DataType`: Type of node to be matched.  
+- `N::DataType`: Type of node to be matched.
+
+## Keywords
 - `condition`: Function or function-like object that checks if a node should be
-selected. It is assigned as a keyword argument.
+selected.
 
 ## Details
 If the `nodetype` should refer to a concrete type and match one of the types
 stored inside the graph. Abstract types or types that are not contained in the
 graph are allowed but the query will never return anything.
 
-The `condition` must be a function or function-like object that takes a 
+The `condition` must be a function or function-like object that takes a
 `Context` as input and returns `true` or `false`. The default `condition` always
 return `true` such that the query will
 
-## Return
-It returns an object of type `Query`. Use `apply()` to execute the query on a 
+## Returns
+It returns an object of type `Query`. Use `apply()` to execute the query on a
 dynamic graph.
 
-# Example
-```julia
+# Examples
+```jldoctest
 struct A <: Node end
 struct B <: Node end
 axiom = A() + B()
@@ -37,11 +39,10 @@ query = Query(A)
 apply(graph, query)
 ```
 """
-Query(nodetype::DataType; condition = x -> true) = Query{nodetype, typeof(condition)}(condition)
+Query(N::DataType; condition = x -> true) = Query{N, typeof(condition)}(condition)
 
 # Helper function for type propagation
-nodetype(query::Query{N,Q}) where {N,Q} = N
-
+nodetype(query::Query{N, Q}) where {N, Q} = N
 
 ################################################################################
 ##############################  Show methods  ##################################
@@ -50,8 +51,9 @@ nodetype(query::Query{N,Q}) where {N,Q} = N
 #=
   Print human-friendly description of a query
 =#
-function show(io::IO, rule::Query{N,Q}) where {N,Q}
-  println(io, "Query object for nodes of type ", N)
+function show(io::IO, rule::Query{N, Q}) where {N, Q}
+    println(io, "Query object for nodes of type ", N)
+    return nothing
 end
 
 ################################################################################
@@ -61,11 +63,11 @@ end
 """
     apply(g::Graph, query::Query)
 
-Return an array with all the nodes in the graph that match the query supplied by 
+Return an array with all the nodes in the graph that match the query supplied by
 the user.
 
-# Example
-```julia
+# Examples
+```jldoctest
 struct A <: Node end
 struct B <: Node end
 axiom = A() + B()
@@ -74,8 +76,8 @@ query = Query(A)
 apply(graph, query)
 ```
 """
-function apply(g::Graph, query::Query{N,Q})::Vector{N} where {Q,N}
-    !hasNodetype(graph(g), N) && (return N[])
+function apply(g::Graph, query::Query{N, Q})::Vector{N} where {Q, N}
+    !has_nodetype(graph(g), N) && (return N[])
     candidates = nodetypes(g)[N]
     output = N[]
     for id in candidates

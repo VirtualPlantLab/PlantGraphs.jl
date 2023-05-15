@@ -9,15 +9,14 @@ function remove!(g::StaticGraph, ID)
     # Update root, insertion and, optionally, edges from neighbouring nodes
     if length(g) > 1
         # Remove the node from nodes and nodetypes
-        removeNodetype!(g, typeof(node.data), ID)
-        removeNode!(g, ID)
+        remove_nodetype!(g, typeof(node.data), ID)
+        remove_node!(g, ID)
         return nothing
     else
         empty!(g)
         return nothing
     end
 end
-
 
 #=
 Remove a node from a graph and all of its descendants. The root or insertion point of the graph will be
@@ -31,12 +30,12 @@ function prune!(g::StaticGraph, ID)
         empty!(g)
         return nothing
     elseif insertion(g) != ID
-        for childID in childrenID(node)
-            prune!(g, childID)
+        for child_id in children_id(node)
+            prune!(g, child_id)
         end
     end
     # Remove edges from parent
-    removeChild!(parent(node, g), ID)
+    remove_child!(parent(node, g), ID)
     # Remove the actual node
     remove!(g, ID)
     return nothing
@@ -48,10 +47,10 @@ Replace a node in a graph by a new node.
 function replace!(g::StaticGraph, ID, n::GraphNode)
     old = g[ID]
     # Transfer parents from the old to the new node
-    setParent!(n, parentID(old))
+    set_parent!(n, parent_id(old))
     # Transfer children from the old to the new node
-    for child in childrenID(old)
-        addChild!(n, child)
+    for child in children_id(old)
+        add_child!(n, child)
     end
     # Remove the old node from the graph without updating edges
     remove!(g, ID)
@@ -59,7 +58,6 @@ function replace!(g::StaticGraph, ID, n::GraphNode)
     g[ID] = n
     return nothing
 end
-
 
 #=
 Replace a node in a graph by a whole new subgraph
@@ -74,30 +72,30 @@ function replace!(g::StaticGraph, ID::Int, gn::StaticGraph)
     remove!(g, ID)
 
     # Add all the nodes of subgraph to the graph
-    for (key,val) in nodes(gn)
+    for (key, val) in nodes(gn)
         g[key] = val
     end
 
     # Transfer parents of the old node to the root node of subgraph
     rootID = root(gn)
     if root(g) != ID
-        pID = parentID(old)
-        setParent!(g[rootID], pID)
-        addChild!(g[pID], rootID)
-        removeChild!(g[pID], ID)
+        pID = parent_id(old)
+        set_parent!(g[rootID], pID)
+        add_child!(g[pID], rootID)
+        remove_child!(g[pID], ID)
     else
-        updateRoot!(g, rootID)
+        update_root!(g, rootID)
     end
 
     # Transfer children of the old node to the insertion node of subgraph and update the children
     insID = insertion(gn)
-    for childID in childrenID(old)
-        addChild!(g[insID], childID)
-        setParent!(g[childID], insID)
+    for child_id in children_id(old)
+        add_child!(g[insID], child_id)
+        set_parent!(g[child_id], insID)
     end
 
     # Change insertion point if the insertion point is being replaced
-    insertion(g) == ID && updateInsertion!(g, insID)
+    insertion(g) == ID && update_insertion!(g, insID)
 
     return nothing
 end

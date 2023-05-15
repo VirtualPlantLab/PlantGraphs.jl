@@ -7,31 +7,33 @@
 """
     Graph(;axiom, rules = nothing, vars = nothing)
 
-Create a dynamic graph from an axiom, one or more rules and, optionally, 
+Create a dynamic graph from an axiom, one or more rules and, optionally,
 graph-level variables.
 
 ## Arguments
-- `axiom`: A single object inheriting from `Node` or a subgraph generated  with 
+- `axiom`: A single object inheriting from `Node` or a subgraph generated  with
 the graph construction DSL. It should represent the initial state of the dynamic
-graph. 
-- `rules`:  A single `Rule` object or a tuple of `Rule` objects (optional). It 
-should include all graph-rewriting rules of the graph. 
-- `vars`: A single object of any user-defined type (optional). This will be the 
+graph.
+
+## Keywords
+- `rules`:  A single `Rule` object or a tuple of `Rule` objects (optional). It
+should include all graph-rewriting rules of the graph.
+- `vars`: A single object of any user-defined type (optional). This will be the
 graph-level variable accessible from any rule or query applied to the graph.
-- `FT`: Floating-point precision to be used when generating the 3D geometry 
-associated to a graph. 
+- `FT`: Floating-point precision to be used when generating the 3D geometry
+associated to a graph.
 
 ## Details
-All arguments are assigned by keyword. The axiom and rules are deep-copied when 
+All arguments are assigned by keyword. The axiom and rules are deep-copied when
 creating the graph but the graph-level variables (if a copy is needed due to
 mutability, the user needs to care of that).
 
-## Return
+## Returns
 An object of type `Graph` representing a dynamic graph. Printing this object
 results in a human-readable description of the type of data stored in the graph.
 
 ## Examples
-```julia
+```jldoctest
 let
     struct A0 <: Node end
     struct B0 <: Node end
@@ -42,14 +44,15 @@ let
 end
 ```
 """
-function Graph(;axiom::Union{StaticGraph, Node},
-               rules::Union{Nothing, Tuple, Rule} = nothing, 
-               vars = nothing) 
-  if rules isa Nothing
-    Graph(StaticGraph(deepcopy(axiom)), (), deepcopy(vars))
-  else
-    Graph(StaticGraph(deepcopy(axiom)), deepcopy(Tuple(rules)), deepcopy(vars))
-  end
+function Graph(; axiom::Union{StaticGraph, Node},
+               rules::Union{Nothing, Tuple, Rule} = nothing,
+               vars = nothing)
+    if rules isa Nothing
+        out = Graph(StaticGraph(deepcopy(axiom)), (), deepcopy(vars))
+    else
+        out = Graph(StaticGraph(deepcopy(axiom)), deepcopy(Tuple(rules)), deepcopy(vars))
+    end
+    return out
 end
 
 ################################################################################
@@ -62,7 +65,7 @@ end
 Returns a tuple with all the graph-rewriting rules stored in a dynamic graph
 
 ## Examples
-```julia
+```jldoctest
 struct A <: Node end
 struct B <: Node end
 axiom = A() + B()
@@ -79,7 +82,7 @@ rules(g::Graph) = g.rules
 Returns the graph-level variables.
 
 ## Example
-```julia
+```jldoctest
 struct A <: Node end
 axiom = A()
 graph = Graph(axiom, vars = 2)
@@ -88,7 +91,7 @@ vars(graph)
 """
 vars(g::Graph) = g.vars
 
-#= 
+#=
 Returns the StaticGraph stored inside the Graph object (users are not supposed
 to interact directly with the StaticGraph)
 =#
@@ -104,15 +107,16 @@ graph(g::Graph) = g.graph
   printed.
 =#
 function show(io::IO, g::Graph)
-   nrules = length(g.rules)
-   nnodes = length(g.graph)
-   nodetypes = collect(keys(g.graph.nodetypes))
-   vars = typeof(g.vars)
-   println(io, "Dynamic graph with ", nnodes, " nodes of types ", join(nodetypes, ','), " and ", nrules, " rewriting rules.")
-   if vars != Nothing
-     println(io, "Dynamic graph variables stored in struct of type ", vars)
-   end
-  return nothing
+    nrules = length(g.rules)
+    nnodes = length(g.graph)
+    nodetypes = collect(keys(g.graph.nodetypes))
+    vars = typeof(g.vars)
+    println(io, "Dynamic graph with ", nnodes, " nodes of types ", join(nodetypes, ','),
+            " and ", nrules, " rewriting rules.")
+    if vars != Nothing
+        println(io, "Dynamic graph variables stored in struct of type ", vars)
+    end
+    return nothing
 end
 
 ################################################################################
@@ -121,7 +125,7 @@ end
 
 # Forward several methods from StaticGraph to Graph
 macro forwardgraph(method)
-   esc(:($method(g::Graph) = $method(graph(g))))
+    esc(:($method(g::Graph) = $method(graph(g))))
 end
 
 @forwardgraph length
@@ -129,7 +133,7 @@ end
 @forwardgraph root
 @forwardgraph rootNode
 @forwardgraph insertion
-@forwardgraph insertionNode
+@forwardgraph insertion_node
 @forwardgraph nodes
 @forwardgraph empty!
 

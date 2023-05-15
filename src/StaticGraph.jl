@@ -7,14 +7,10 @@
  appended to an existing graph
 =#
 let ID = Threads.Atomic{Int}(0)
-    global generateID
-    global resetID
-    function generateID()
-        Threads.atomic_add!(ID,1) + 1
-    end
-    function resetID()
-        ID = Threads.Atomic{Int}(0)
-    end
+    global generate_id
+    global reset_id!
+    generate_id() = Threads.atomic_add!(ID, 1) + 1
+    reset_id!() = ID = Threads.Atomic{Int}(0)
 end
 
 ################################################################################
@@ -26,10 +22,11 @@ end
 =#
 StaticGraph() = StaticGraph(Dict{Int, Any}(), Dict{DataType, Set{Int}}(), -1, -1)
 function StaticGraph(n::GraphNode)
-    ID = generateID()
-    changeID!(n, ID)
+    ID = generate_id()
+    change_id!(n, ID)
     nlocal = copy(n)
-    g = StaticGraph(Dict{Int, Any}(ID => nlocal), Dict(typeof(nlocal.data) =>  Set{Int}(ID)), ID, ID)
+    g = StaticGraph(Dict{Int, Any}(ID => nlocal), Dict(typeof(nlocal.data) => Set{Int}(ID)),
+                    ID, ID)
     return g
 end
 StaticGraph(n::Node) = StaticGraph(GraphNode(n))
@@ -43,36 +40,38 @@ StaticGraph(s::StaticGraph) = s
 Nodetypes
 =#
 nodetypes(g) = g.nodetypes
-hasNodetype(g::StaticGraph, T) = haskey(g.nodetypes, T)
-function addNodetype!(g::StaticGraph, T, ID)
-    !hasNodetype(g, T) && (g.nodetypes[T] = Set{Int}())
+has_nodetype(g::StaticGraph, T) = haskey(g.nodetypes, T)
+function add_nodetype!(g::StaticGraph, T, ID)
+    !has_nodetype(g, T) && (g.nodetypes[T] = Set{Int}())
     push!(g.nodetypes[T], ID)
+    return nothing
 end
-function removeNodetype!(g::StaticGraph, T, ID)
+function remove_nodetype!(g::StaticGraph, T, ID)
     delete!(g.nodetypes[T], ID)
+    return nothing
 end
 
 #=
 Root
 =#
 root(g::StaticGraph) = g.root
-updateRoot!(g, ID) = g.root = ID
+update_root!(g, ID) = g.root = ID
 rootNode(g) = g[g.root]
 
 #=
 Insertion
 =#
 insertion(g::StaticGraph) = g.insertion
-updateInsertion!(g, ID) = g.insertion = ID
-insertionNode(g) = g[g.insertion]
+update_insertion!(g, ID) = g.insertion = ID
+insertion_node(g) = g[g.insertion]
 
 #=
 GraphNode
 =#
 nodes(g) = g.nodes
-hasNode(g::StaticGraph, ID) = haskey(g.nodes, ID)
+has_node(g::StaticGraph, ID) = haskey(g.nodes, ID)
 length(g::StaticGraph) = length(g.nodes)
-removeNode!(g::StaticGraph, ID) = delete!(g.nodes, ID)
+remove_node!(g::StaticGraph, ID) = delete!(g.nodes, ID)
 
 #=
   Extracting and adding a node to a graph
@@ -81,11 +80,11 @@ removeNode!(g::StaticGraph, ID) = delete!(g.nodes, ID)
     Copy the node rather than keeping a reference to it (the user data is not copied)
 =#
 getindex(g::StaticGraph, ID::Int) = g.nodes[ID]
-function setindex!(g::StaticGraph, n::GraphNode{T}, ID) where T
+function setindex!(g::StaticGraph, n::GraphNode{T}, ID) where {T}
     cn = copy(n)
     g.nodes[ID] = cn
-    changeID!(cn, ID)
-    addNodetype!(g, T, ID)
+    change_id!(cn, ID)
+    add_nodetype!(g, T, ID)
     return nothing
 end
 

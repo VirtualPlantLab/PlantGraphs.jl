@@ -1,37 +1,37 @@
 # User-defined types for testing the package
 module GT
 
-  using VPLGraph
+using VPLGraph
 
-  struct bar <: Node
+struct bar <: Node
     x::Int
-  end
+end
 
-  struct A <: Node end
+struct A <: Node end
 
-  struct B <: Node end
+struct B <: Node end
 
-  mutable struct Cell{T} <: Node
+mutable struct Cell{T} <: Node
     state::T
-  end
+end
 
-  struct G3pars
+struct G3pars
     division::Rational{Int}
     growth::Rational{Int}
-  end
+end
 
-  struct ACell <: Node
+struct ACell <: Node
     state::Int
-  end
+end
 
-  struct BCell <: Node
+struct BCell <: Node
     state::Int
-  end
+end
 
-  struct CCell <: Node
+struct CCell <: Node
     state::Int
-  end
+end
 
-  struct B <: Node end
+struct B <: Node end
 
 end
