@@ -1,9 +1,11 @@
-import VPLGraph as V
+import VPLGraphs as V
 using Test
+include("types.jl")
+import .GT
 
 let
     # Test GraphNode construction
-    n = V.GraphNode(1)
+    n = V.GraphNode(GT.A())
 
     # Check that this returns the correct type
     @test n isa V.GraphNode
@@ -33,7 +35,7 @@ let
     @test V.is_root(n)
 
     # Retrieve data stored inside the node
-    @test V.data(n) === 1
+    @test V.data(n) === GT.A()
 
     # Make sure that the copied node was independent
     @test V.has_children(n2)

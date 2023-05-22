@@ -20,12 +20,13 @@ end
 #=
     Facilitate construction of static graphs without having to use the DSL
 =#
-StaticGraph() = StaticGraph(Dict{Int, Any}(), Dict{DataType, Set{Int}}(), -1, -1)
+StaticGraph() = StaticGraph(Dict{Int, GraphNode}(), Dict{DataType, Set{Int}}(), -1, -1)
 function StaticGraph(n::GraphNode)
     ID = generate_id()
     change_id!(n, ID)
     nlocal = copy(n)
-    g = StaticGraph(Dict{Int, Any}(ID => nlocal), Dict(typeof(nlocal.data) => Set{Int}(ID)),
+    g = StaticGraph(Dict{Int, GraphNode}(ID => nlocal),
+                    Dict(typeof(nlocal.data) => Set{Int}(ID)),
                     ID, ID)
     return g
 end

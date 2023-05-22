@@ -145,7 +145,7 @@ end
         id = rule.matched[i]
         context = rule.contexts[i]
         rhs = rule.rhs(Context(g, g[id]), context...)
-        replace!(graph(g), id, rhs)
+        replace!(static_graph(g), id, rhs)
     end
     return nothing
 end

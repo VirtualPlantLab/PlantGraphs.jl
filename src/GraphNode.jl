@@ -4,7 +4,7 @@
 ############################### Constructors ###################################
 ################################################################################
 
-GraphNode(data) = GraphNode(data, Set{Int}(), missing, -1)
+GraphNode(data::VPLNodeData) = GraphNode(data, Set{Int}(), missing, -1)
 
 ################################################################################
 ################################## Getters #####################################
@@ -54,20 +54,20 @@ function has_ancestor(node::GraphNode, g::Graph, condition, maxlevel::Int,
 end
 
 #=
- Check if GraphNode has a child or a descendent that fits a condition with optional
+ Check if GraphNode has a child or a descendant that fits a condition with optional
  recursive search (with maximum depth)
 =#
 has_children(n::GraphNode) = !isempty(n.children_id)
 is_leaf(n::GraphNode) = !has_children(n)
 
-function has_descendent(node::GraphNode, g::Graph, condition, maxlevel::Int,
+function has_descendant(node::GraphNode, g::Graph, condition, maxlevel::Int,
                         level::Int = 1)
     for child in children(node, g)
         if condition(Context(g, child))
             return true, level
         else
             if level <= maxlevel
-                if has_descendent(child, g, condition, maxlevel, level + 1)[1]
+                if has_descendant(child, g, condition, maxlevel, level + 1)[1]
                     return true, level + 1
                 end
             end
@@ -110,18 +110,18 @@ function ancestor(node::GraphNode, g::Graph, condition, maxlevel::Int,
 end
 
 #=
- Retrieve the children GraphNode or a descendent that fits a condition with optional
+ Retrieve the children GraphNode or a descendant that fits a condition with optional
  recursive search (with maximum depth)
 =#
 children(n::GraphNode, g::StaticGraph) = (g[id] for id in children_id(n))
 
-function descendent(node::GraphNode, g::Graph, condition, maxlevel::Int,
+function descendant(node::GraphNode, g::Graph, condition, maxlevel::Int,
                     level::Int = 1)
     for child in children(node, g)
         if condition(Context(g, child))
             return child
         elseif level <= maxlevel
-            return descendent(child, g, condition, maxlevel, level + 1)
+            return descendant(child, g, condition, maxlevel, level + 1)
         end
     end
     return missing # This means we tested on a leaf node

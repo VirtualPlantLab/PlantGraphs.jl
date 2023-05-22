@@ -1,4 +1,4 @@
-using VPLGraph
+using VPLGraphs
 using Test
 using Suppressor
 include("types.jl")
@@ -11,7 +11,7 @@ let
     # Silly model that duplicate cells and updates the values of the cells
     function growth(context)
         c = data(context)
-        f = vars(context).division
+        f = graph_data(context).division
         GT.Cell(c.state * f) + (GT.Cell(c.state * (1 // 1 - f)),)
     end
 
@@ -23,7 +23,7 @@ let
           "rule = Rule replacing nodes of type Main.GT.Cell{Rational{$(typeof(1))}} without context capturing.\n\n"
 
     # Create organism
-    organism = Graph(axiom = axiom, rules = rule, vars = GT.G3pars(1 // 3, 5 // 4))
+    organism = Graph(axiom = axiom, rules = rule, data = GT.G3pars(1 // 3, 5 // 4))
     printed = @capture_out @show organism
     @test printed ==
           "organism = Dynamic graph with 1 nodes of types Main.GT.Cell{Rational{$(typeof(1))}} and 1 rewriting rules.\nDynamic graph variables stored in struct of type Main.GT.G3pars\n\n"
@@ -34,7 +34,7 @@ let
     @test printed ==
           "queryCell = Query object for nodes of type Main.GT.Cell{Rational{$(typeof(1))}}\n\n"
     function grow!(organism)
-        f = vars(organism).growth
+        f = data(organism).growth
         for cell in apply(organism, queryCell)
             cell.state *= f
         end
@@ -87,7 +87,7 @@ let
 
     # Create organism
     organism = Graph(axiom = axiom, rules = (ruleGrowth, ruleDeath),
-                     vars = GT.G3pars(1 // 3, 10 // 9))
+                     data = GT.G3pars(1 // 3, 10 // 9))
 
     # Grow six steps
     for i in 1:5

@@ -1,11 +1,11 @@
-using VPLGraph
+using VPLGraphs
 using Test
 import Aqua
 
 # Aqua
 @testset "Aqua" begin
-    Aqua.test_all(VPLGraph, ambiguities = false)
-    Aqua.test_ambiguities([VPLGraph])
+    Aqua.test_all(VPLGraphs, ambiguities = false)
+    Aqua.test_ambiguities([VPLGraphs])
 end
 # Internal tests
 @testset "Graph node" begin include("internal/test_graphnode.jl") end

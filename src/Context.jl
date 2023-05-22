@@ -14,15 +14,15 @@ Returns the data stored in a node. Intended to be used within a rule or query.
 """
 data(c::Context) = data(node(c))
 
-# Return the StaticGraph stored inside the Context object
+# Return the Graph stored inside the Context object
 graph(c::Context) = c.graph
 
 """
-    vars(c::Context)
+    graph_data(c::Context)
 
 Returns the graph-level variables. Intended to be used within a rule or query.
 """
-vars(c::Context) = vars(graph(c))
+graph_data(c::Context) = data(graph(c))
 
 # This is needed to traverse graphs within rules
 id(c::Context) = self_id(node(c))
@@ -122,9 +122,9 @@ Check if a node is a leaf in the graph (i.e., has no children) and return `true`
 is_leaf(c::Context) = !has_children(c)
 
 """
-    has_descendent(c::Context; condition = x -> true, max_level::Int = typemax(Int))
+    has_descendant(c::Context; condition = x -> true, max_level::Int = typemax(Int))
 
-Check if a node has a descendent that matches the optional condition. Intended to be used
+Check if a node has a descendant that matches the optional condition. Intended to be used
 within a rule or query.
 
 ## Arguments
@@ -164,7 +164,7 @@ let
     axiom = A1(2) + (B1(1) + A1(3), B1(4))
     g = Graph(axiom = axiom)
     function qfun(n)
-        has_descendent(n, condition = x -> data(x).val == 1)[1]
+        has_descendant(n, condition = x -> data(x).val == 1)[1]
     end
     Q1 = Query(A1, query = qfun)
     R1 = apply(g, Q1)
@@ -174,8 +174,8 @@ let
 end
 ```
 """
-function has_descendent(c::Context; condition = x -> true, max_level::Int = typemax(Int))
-    out = has_descendent(node(c), graph(c), condition, max_level, 1)
+function has_descendant(c::Context; condition = x -> true, max_level::Int = typemax(Int))
+    out = has_descendant(node(c), graph(c), condition, max_level, 1)
     return out
 end
 
@@ -290,9 +290,9 @@ function children(c::Context)
 end
 
 """
-    descendent(c::Context; condition = x -> true, max_level::Int = typemax(Int))
+    descendant(c::Context; condition = x -> true, max_level::Int = typemax(Int))
 
-Returns the first descendent of a node that matches the `condition`. Intended to
+Returns the first descendant of a node that matches the `condition`. Intended to
 be used within a rule or query.
 
 ## Arguments
@@ -305,8 +305,8 @@ and returns `true` or `false`.
 traversing the graph.
 
 ## Details
-If `has_descendent()` returns `false` for the same node and `condition`,
-`descendent()` will return `missing`, otherwise it returns the `Context`
+If `has_descendant()` returns `false` for the same node and `condition`,
+`descendant()` will return `missing`, otherwise it returns the `Context`
 associated to the matching node.
 
 ## Return
@@ -320,7 +320,7 @@ let
     axiom = A1(1) + (B1(1) + A1(3), B1(4))
     g = Graph(axiom = axiom)
     function qfun(n)
-        na = descendent(n, condition = x -> (data(x).val == 1))
+        na = descendant(n, condition = x -> (data(x).val == 1))
         if !ismissing(na)
             data(na) isa B1
         else
@@ -335,8 +335,8 @@ let
 end
 ```
 """
-function descendent(c::Context; condition = x -> true, max_level::Int = typemax(Int))
-    desc = descendent(node(c), graph(c), condition, max_level, 1)
+function descendant(c::Context; condition = x -> true, max_level::Int = typemax(Int))
+    desc = descendant(node(c), graph(c), condition, max_level, 1)
     out = Context(graph(c), desc)
     return out
 end

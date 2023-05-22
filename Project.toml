@@ -1,4 +1,4 @@
-name = "VPLGraph"
+name = "VPLGraphs"
 uuid = "615ad455-9aac-4340-9247-71ef610f781a"
 authors = ["Alejandro Morales Sierra <alejandro.moralessierra@wur.nl> and contributors"]
 version = "0.0.1"
@@ -8,10 +8,12 @@ GraphMakie = "1ecd5474-83a3-4783-bb4f-06765db800d2"
 Graphs = "86223c79-3864-5bf0-83f7-82e725a168b6"
 NetworkLayout = "46757867-2c16-5918-afeb-47bfcb05e46a"
 Unrolled = "9602ed7d-8fef-5bc8-8597-8f21381861e8"
+VPLGraphAPI = "22098ff1-2c69-4025-acb4-169bf8942e20"
 
 [compat]
 GraphMakie = "0.5.3"
 Graphs = "1.8.0"
 NetworkLayout = "0.4.5"
 Unrolled = "0.1.5"
+VPLGraphAPI = "0.0.1"
 julia = "1.9"

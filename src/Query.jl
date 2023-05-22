@@ -77,7 +77,7 @@ apply(graph, query)
 ```
 """
 function apply(g::Graph, query::Query{N, Q})::Vector{N} where {Q, N}
-    !has_nodetype(graph(g), N) && (return N[])
+    !has_nodetype(static_graph(g), N) && (return N[])
     candidates = nodetypes(g)[N]
     output = N[]
     for id in candidates

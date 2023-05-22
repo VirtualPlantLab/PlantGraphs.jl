@@ -4,7 +4,7 @@ CurrentModule = VPLGraph
 
 # VPLGraph
 
-API documentation for [VPLGraph](https://github.com/VirtualPlantGraph/VPLGraph.jl).
+API documentation for [VPLGraphs](https://github.com/VirtualPlantGraph/VPLGraphs.jl).
 
 ## Types
 
@@ -21,7 +21,7 @@ Query
 ```
 
 ```@docs
-Node
+VPLNodeData
 ```
 
 ```@docs
@@ -31,11 +31,11 @@ Context
 ## Graph DSL
 
 ```@docs
-+(n1::Node, n2::Node)
-+(g::StaticGraph, n::Node)
-+(n::Node, g::StaticGraph)
++(n1::VPLNodeData, n2::VPLNodeData)
++(g::StaticGraph, n::VPLNodeData)
++(n::VPLNodeData, g::StaticGraph)
 +(g1::StaticGraph, g2::StaticGraph)
-+(n::Node, T::Tuple)
++(n::VPLNodeData, T::Tuple)
 ```
 
 ## Applying rules and queries
@@ -51,7 +51,7 @@ rewrite!(g::Graph)
 ## Extracting information
 
 ```@docs
-vars(g::Graph)
+data(g::Graph)
 ```
 
 ```@docs
@@ -59,14 +59,14 @@ rules(g::Graph)
 ```
 
 ```@docs
-vars(c::Context)
+data(c::Context)
 ```
 
 ```@docs
 data(c::Context)
 ```
 
-## Node relations
+## VPLNodeData relations
 
 ```@docs
 has_parent(c::Context)
@@ -97,7 +97,7 @@ is_leaf(c::Context)
 ```
 
 ```@docs
-has_descendent(c::Context; condition = x -> true, maxlevel::Int = typemax(Int))
+has_descendant(c::Context; condition = x -> true, maxlevel::Int = typemax(Int))
 ```
 
 ```@docs
@@ -105,7 +105,7 @@ children(c::Context)
 ```
 
 ```@docs
-descendent(c::Context; condition = x -> true, maxlevel::Int = typemax(Int))
+descendant(c::Context; condition = x -> true, maxlevel::Int = typemax(Int))
 ```
 
 # Traversal algorithms
@@ -129,7 +129,7 @@ draw(g::Graph; force = false, inline = false, resolution = (1920, 1080),
     nlabels_textsize = 15, arrow_size = 15, node_size = 5)
 draw(g::StaticGraph; force = false, inline = false, resolution = (1920, 1080),
               nlabels_textsize = 15, arrow_size = 15, node_size = 5)
-node_label(n::Node, id)
+node_label(n::VPLNodeData, id)
 ```
 
 ```@docs

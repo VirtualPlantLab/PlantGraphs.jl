@@ -5,7 +5,7 @@
 ################################################################################
 
 """
-    Graph(;axiom, rules = nothing, vars = nothing)
+    Graph(;axiom, rules = nothing, data = nothing)
 
 Create a dynamic graph from an axiom, one or more rules and, optionally,
 graph-level variables.
@@ -18,7 +18,7 @@ graph.
 ## Keywords
 - `rules`:  A single `Rule` object or a tuple of `Rule` objects (optional). It
 should include all graph-rewriting rules of the graph.
-- `vars`: A single object of any user-defined type (optional). This will be the
+- `data`: A single object of any user-defined type (optional). This will be the
 graph-level variable accessible from any rule or query applied to the graph.
 - `FT`: Floating-point precision to be used when generating the 3D geometry
 associated to a graph.
@@ -46,11 +46,11 @@ end
 """
 function Graph(; axiom::Union{StaticGraph, Node},
                rules::Union{Nothing, Tuple, Rule} = nothing,
-               vars = nothing)
+               data = nothing)
     if rules isa Nothing
-        out = Graph(StaticGraph(deepcopy(axiom)), (), deepcopy(vars))
+        out = Graph(StaticGraph(deepcopy(axiom)), (), deepcopy(data))
     else
-        out = Graph(StaticGraph(deepcopy(axiom)), deepcopy(Tuple(rules)), deepcopy(vars))
+        out = Graph(StaticGraph(deepcopy(axiom)), deepcopy(Tuple(rules)), deepcopy(data))
     end
     return out
 end
@@ -77,7 +77,7 @@ rules(rules_graph)
 rules(g::Graph) = g.rules
 
 """
-  vars(g::Graph)
+  data(g::Graph)
 
 Returns the graph-level variables.
 
@@ -85,17 +85,17 @@ Returns the graph-level variables.
 ```jldoctest
 struct A <: Node end
 axiom = A()
-graph = Graph(axiom, vars = 2)
-vars(graph)
+graph = Graph(axiom, data = 2)
+data(graph)
 ```
 """
-vars(g::Graph) = g.vars
+data(g::Graph) = g.data
 
 #=
 Returns the StaticGraph stored inside the Graph object (users are not supposed
 to interact directly with the StaticGraph)
 =#
-graph(g::Graph) = g.graph
+static_graph(g::Graph) = g.graph
 
 ################################################################################
 ##############################  Show methods  ##################################
@@ -110,11 +110,11 @@ function show(io::IO, g::Graph)
     nrules = length(g.rules)
     nnodes = length(g.graph)
     nodetypes = collect(keys(g.graph.nodetypes))
-    vars = typeof(g.vars)
+    data = typeof(g.data)
     println(io, "Dynamic graph with ", nnodes, " nodes of types ", join(nodetypes, ','),
             " and ", nrules, " rewriting rules.")
-    if vars != Nothing
-        println(io, "Dynamic graph variables stored in struct of type ", vars)
+    if data != Nothing
+        println(io, "Dynamic graph variables stored in struct of type ", data)
     end
     return nothing
 end
@@ -125,7 +125,7 @@ end
 
 # Forward several methods from StaticGraph to Graph
 macro forwardgraph(method)
-    esc(:($method(g::Graph) = $method(graph(g))))
+    esc(:($method(g::Graph) = $method(static_graph(g))))
 end
 
 @forwardgraph length
@@ -137,5 +137,5 @@ end
 @forwardgraph nodes
 @forwardgraph empty!
 
-getindex(g::Graph, ID::Int) = getindex(graph(g), ID)
-children(n::GraphNode, g::Graph) = children(n, graph(g))
+getindex(g::Graph, ID::Int) = getindex(static_graph(g), ID)
+children(n::GraphNode, g::Graph) = children(n, static_graph(g))

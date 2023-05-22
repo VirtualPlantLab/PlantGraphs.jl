@@ -18,7 +18,7 @@ let
 end
 ```
 """
-abstract type Node end
+abstract type Node <: VPLNodeData end
 
 #=
   GraphNode{T}
@@ -30,34 +30,11 @@ to the type of data stored in the node (defined by the user). User do not  build
 build `GraphNode` objects directly, this is always handled by VPL when creating
 or modifying a graph.
 =#
-mutable struct GraphNode{T}
+mutable struct GraphNode{T <: Node} <: VPLGraphNode
     data::T
     children_id::Set{Int}
     parent_id::Union{Int, Missing}
     self_id::Int
-end
-
-"""
-    Context
-
-Data structure than links a node to the rest of the graph.
-
-## Fields
-- `graph`: Dynamic graph that contains the node.
-- `node`: Node inside the graph.
-
-## Details
-A `Context` object wraps references to a node and its associated graph. The
-purpose of this structure is to be able to test relationships among nodes within
-a graph (from with a query or rule), as well as access the data stored in a node
-(with `data()`) or the graph (with `vars()`).
-
-Users do not build `Context` objects directly but they are provided by VPL as
-inputs to the user-defined functions inside rules and queries.
-"""
-mutable struct Context{N, G}
-    graph::G
-    node::N
 end
 
 #=
@@ -70,8 +47,8 @@ rules or graph-level variables.
 Users do not build `StaticGraph` objects directly but rather they are created by
 VPL through the graph construction DSL (see User Manual for details).
 =#
-mutable struct StaticGraph
-    nodes::Dict{Int, Any}
+mutable struct StaticGraph <: VPLStaticGraph
+    nodes::Dict{Int, GraphNode}
     nodetypes::Dict{DataType, Set{Int}}
     root::Int
     insertion::Int
@@ -81,12 +58,12 @@ end
 #=
   Data structure to store a graph plus rules to rewrite it and graph-level variables
   All rules are stored in a dictionary which keys are the unique identifiers of the rules
-  The field vars contains a struct with variables that are accesible in queries and production rules
+  The field data contains a struct with variables that are accesible in queries and production rules
 =#
-mutable struct Graph{T, S <: Tuple}
+mutable struct Graph{T <: Union{Nothing, VPLGraphData}, S <: Tuple} <: VPLGraph
     graph::StaticGraph
     rules::S
-    vars::T
+    data::T
 end
 
 # Docstring is included in the constructor in Rule.jl
@@ -107,4 +84,27 @@ end
 =#
 struct Query{N, Q}
     query::Q
+end
+
+"""
+    Context
+
+Data structure than links a node to the rest of the graph.
+
+## Fields
+- `graph`: Dynamic graph that contains the node.
+- `node`: Node inside the graph.
+
+## Details
+A `Context` object wraps references to a node and its associated graph. The
+purpose of this structure is to be able to test relationships among nodes within
+a graph (from with a query or rule), as well as access the data stored in a node
+(with `data()`) or the graph (with `graph_data()`).
+
+Users do not build `Context` objects directly but they are provided by VPL as
+inputs to the user-defined functions inside rules and queries.
+"""
+mutable struct Context{N <: GraphNode, G <: Graph}
+    graph::G
+    node::N
 end

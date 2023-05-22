@@ -1,4 +1,4 @@
-using VPLGraph
+using VPLGraphs
 using Test
 include("types.jl")
 import .GT
@@ -16,12 +16,12 @@ let
 
     rule = Rule(GT.Cell{Int}, lhs = transfer,
                 rhs = (context, father) -> GT.Cell(data(father).state), captures = true)
-    @test VPLGraph.captures(rule)
+    @test VPLGraphs.captures(rule)
 
     axiom = GT.Cell(1) + GT.Cell(0) + GT.Cell(0)
     pop = Graph(axiom = axiom, rules = rule)
 
-    getStates(pop) = [data(n).state for n in values(VPLGraph.nodes(pop))]
+    getStates(pop) = [data(n).state for n in values(VPLGraphs.nodes(pop))]
     @test sum(getStates(pop)) == 1
     rewrite!(pop)
     @test sum(getStates(pop)) == 2

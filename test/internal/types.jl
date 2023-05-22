@@ -1,15 +1,26 @@
 # User-defined types for testing the package
 module GT
 
-using VPLGraph
+using VPLGraphs
 
 struct bar <: Node
     x::Int
 end
 
 struct A <: Node end
+struct AV <: Node
+    val::Int
+end
 
 struct B <: Node end
+struct BV <: Node
+    val::Int
+end
+
+struct C <: Node end
+struct CV <: Node
+    val::Int
+end
 
 mutable struct Cell{T} <: Node
     state::T
