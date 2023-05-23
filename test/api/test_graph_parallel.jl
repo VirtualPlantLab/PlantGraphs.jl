@@ -22,14 +22,14 @@ let
 
     # Run in series
     for i in 1:10
-        for j in 1:length(algae_serial)
+        for j in eachindex(algae_serial)
             rewrite!(algae_serial[j])
         end
     end
 
     # Run in parallel
     for i in 1:10
-        Threads.@threads for j in 1:length(algae_parallel)
+        Threads.@threads for j in eachindex(algae_parallel)
             rewrite!(algae_parallel[j])
         end
     end
