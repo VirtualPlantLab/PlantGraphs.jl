@@ -62,8 +62,8 @@ function traverse(g::Graph; fun = () -> nothing, order = "any", ID = root(g))
 end
 function traverse(g::StaticGraph; fun = () -> nothing, order = "any", ID = root(g))
     if order == "any"
-    for val in values(nodes(g))
-        fun(data(val))
+        for val in values(nodes(g))
+            fun(data(val))
         end
     elseif order == "dfs"
         traverse_dfs(g::Graph; fun = fun, ID = ID)
@@ -129,7 +129,9 @@ let
 end
 ```
 """
-traverse_dfs(g::Graph; fun = () -> nothing, ID = root(g)) = traverse_dfs(static_graph(g), fun, ID)
+function traverse_dfs(g::Graph; fun = () -> nothing, ID = root(g))
+    traverse_dfs(static_graph(g), fun, ID)
+end
 
 function traverse_dfs(g::StaticGraph, fun, ID)
     # Use LIFO stack to keep track of nodes in traversal
@@ -204,7 +206,9 @@ let
 end
 ```
 """
-traverse_bfs(g::Graph; fun = () -> nothing, ID = root(g)) = traverse_bfs(static_graph(g), fun, ID)
+function traverse_bfs(g::Graph; fun = () -> nothing, ID = root(g))
+    traverse_bfs(static_graph(g), fun, ID)
+end
 
 function traverse_bfs(g::StaticGraph, fun, ID)
     # Use LIFO stack to keep track of nodes in traversal

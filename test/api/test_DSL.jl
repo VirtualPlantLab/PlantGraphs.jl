@@ -13,7 +13,8 @@ let
 
     @test typeof(g1) == typeof(g2) == VPLGraphs.StaticGraph
     @test length(g1) == length(g2)
-    @test VPLGraphs.rootNode(g1) |> VPLGraphs.data == VPLGraphs.rootNode(g2) |> VPLGraphs.data
+    @test VPLGraphs.rootNode(g1) |> VPLGraphs.data ==
+          VPLGraphs.rootNode(g2) |> VPLGraphs.data
     @test VPLGraphs.insertion_node(g1) |> VPLGraphs.data ==
           VPLGraphs.insertion_node(g2) |> VPLGraphs.data
 

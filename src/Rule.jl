@@ -97,7 +97,7 @@ function match_rule!(rule::Rule, node::Context, assigned)
     if match
         nid = id(node)
         nid in assigned &&
-           Throw(ErrorException("GraphNode with id $nid was matched by more than one rule"))
+            Throw(ErrorException("GraphNode with id $nid was matched by more than one rule"))
         push!(rule.matched, nid)
         push!(assigned, nid)
         push!(rule.contexts, con)
