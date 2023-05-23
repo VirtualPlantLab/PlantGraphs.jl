@@ -8,14 +8,14 @@ let
 
     # Empty StaticGraph constructor
     g1 = V.StaticGraph()
-    @test V.root(g1) == V.insertion(g1) == -1
+    @test V.root_id(g1) == V.insertion_id(g1) == -1
     @test length(g1) == 0
     @test length(g1.nodetypes) == 0
 
     # Single node StaticGraph constructor
     n1 = V.GraphNode(GT.A())
     g2 = V.StaticGraph(n1)
-    @test V.root(g2) == V.insertion(g2) == collect(keys(g2.nodes))[1]
+    @test V.root_id(g2) == V.insertion_id(g2) == collect(keys(g2.nodes))[1]
     @test length(g2) == 1
     @test length(g2.nodetypes) == 1
     @test V.has_nodetype(g2, GT.A)
@@ -25,14 +25,14 @@ let
     n2 = V.GraphNode(GT.BV(2))
     n3 = V.GraphNode(GT.CV(3))
     g3 = n1 + n2 + n3
-    @test V.root(g3) < V.insertion(g3)
+    @test V.root_id(g3) < V.insertion_id(g3)
     @test length(g3) == 3
     @test length(g3.nodetypes) == 3
     @test sum(i.data.val for i in V.nodes(g3) |> values |> collect) == 6
-    @test is_root(g3[V.root(g3)])
-    @test !is_leaf(g3[V.root(g3)])
-    @test is_leaf(g3[V.insertion(g3)])
-    @test !is_root(g3[V.insertion(g3)])
+    @test is_root(V.root(g3))
+    @test !is_leaf(V.root(g3))
+    @test is_leaf(V.insertion(g3))
+    @test !is_root(V.insertion(g3))
     @test sum(is_leaf(node) for node in V.nodes(g3) |> values) == 1
     @test sum(is_root(node) for node in V.nodes(g3) |> values) == 1
 

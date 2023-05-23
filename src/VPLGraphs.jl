@@ -3,13 +3,14 @@ module VPLGraphs
 # Public API of VPLGraph
 export VPLGraphData, Node, Graph, Rule, Query, rewrite!, apply, data, rules, graph,
        static_graph, data, graph_data, parent,
-       has_parent, has_ancestor, ancestor, is_root, has_children, has_descendant,
+       has_parent, has_ancestor, ancestor, is_root, root, has_children, has_descendant,
        children, descendant, is_leaf, traverse, traverse_dfs, traverse_bfs, draw,
        calculate_resolution, node_label
 
 # API for VPL-style graphs
 import VPLGraphAPI: VPLGraph, VPLStaticGraph, VPLGraphNode, VPLGraphData, VPLNodeData, data,
-                    is_root, has_parent, has_ancestor, ancestor, is_leaf, has_children,
+                    is_root, root, has_parent, has_ancestor, ancestor, is_leaf,
+                    has_children,
                     children, has_descendant, descendant, traverse
 
 # Base functions that will be extended

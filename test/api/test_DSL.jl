@@ -13,10 +13,10 @@ let
 
     @test typeof(g1) == typeof(g2) == VPLGraphs.StaticGraph
     @test length(g1) == length(g2)
-    @test VPLGraphs.rootNode(g1) |> VPLGraphs.data ==
-          VPLGraphs.rootNode(g2) |> VPLGraphs.data
-    @test VPLGraphs.insertion_node(g1) |> VPLGraphs.data ==
-          VPLGraphs.insertion_node(g2) |> VPLGraphs.data
+    @test VPLGraphs.root(g1) |> VPLGraphs.data ==
+          VPLGraphs.root(g2) |> VPLGraphs.data
+    @test VPLGraphs.insertion(g1) |> VPLGraphs.data ==
+          VPLGraphs.insertion(g2) |> VPLGraphs.data
 
     n3 = [GT.bar(i) for i in 1:4]
     g3 = n1[1] + (n1[3] + n1[4], n1[2])

@@ -130,10 +130,10 @@ end
 
 @forwardgraph length
 @forwardgraph nodetypes
+@forwardgraph root_id
 @forwardgraph root
-@forwardgraph rootNode
+@forwardgraph insertion_id
 @forwardgraph insertion
-@forwardgraph insertion_node
 @forwardgraph nodes
 @forwardgraph empty!
 

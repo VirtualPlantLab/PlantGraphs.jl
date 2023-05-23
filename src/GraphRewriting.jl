@@ -26,10 +26,10 @@ node.
 =#
 function prune!(g::StaticGraph, ID)
     node = g[ID]
-    if length(g) == 1 || root(g) == ID
+    if length(g) == 1 || root_id(g) == ID
         empty!(g)
         return nothing
-    elseif insertion(g) != ID
+    elseif insertion_id(g) != ID
         for child_id in children_id(node)
             prune!(g, child_id)
         end
@@ -77,8 +77,8 @@ function replace!(g::StaticGraph, ID::Int, gn::StaticGraph)
     end
 
     # Transfer parents of the old node to the root node of subgraph
-    rootID = root(gn)
-    if root(g) != ID
+    rootID = root_id(gn)
+    if root_id(g) != ID
         pID = parent_id(old)
         set_parent!(g[rootID], pID)
         add_child!(g[pID], rootID)
@@ -88,14 +88,14 @@ function replace!(g::StaticGraph, ID::Int, gn::StaticGraph)
     end
 
     # Transfer children of the old node to the insertion node of subgraph and update the children
-    insID = insertion(gn)
+    insID = insertion_id(gn)
     for child_id in children_id(old)
         add_child!(g[insID], child_id)
         set_parent!(g[child_id], insID)
     end
 
     # Change insertion point if the insertion point is being replaced
-    insertion(g) == ID && update_insertion!(g, insID)
+    insertion_id(g) == ID && update_insertion!(g, insID)
 
     return nothing
 end

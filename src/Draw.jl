@@ -26,7 +26,7 @@ function GR.DiGraph(g::StaticGraph)
     # Connect ids in original graph to new ids but make sure the root
     # node is at the beginning
     ids = nodes(g) |> keys |> collect
-    rid = root(g)
+    rid = root_id(g)
     posroot = findfirst(i -> i == rid, ids)
     ids = vcat(rid, ids[1:(posroot - 1)], ids[(posroot + 1):end])
     map_ids = Dict((ids[i], i) for i in 1:n)

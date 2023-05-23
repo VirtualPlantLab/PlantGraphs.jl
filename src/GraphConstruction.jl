@@ -32,9 +32,9 @@ function append!(g::StaticGraph, ID, gn::StaticGraph)
     for (key, val) in nodes(gn)
         g[key] = val
     end
-    add_child!(g[ID], root(gn))
-    set_parent!(g[root(gn)], ID)
-    out = insertion(gn)
+    add_child!(g[ID], root_id(gn))
+    set_parent!(g[root_id(gn)], ID)
+    out = insertion_id(gn)
     return out
 end
 
@@ -44,7 +44,7 @@ end
 
 function +(n1::GraphNode, n2::GraphNode)
     g = StaticGraph(n1)
-    nID = append!(g, insertion(g), n2)
+    nID = append!(g, insertion_id(g), n2)
     update_insertion!(g, nID)
     return g
 end
@@ -67,7 +67,7 @@ end
 +(n1::Node, n2::Node) = GraphNode(n1) + GraphNode(n2)
 
 function +(g::StaticGraph, n::GraphNode)
-    nID = append!(g, insertion(g), n)
+    nID = append!(g, insertion_id(g), n)
     update_insertion!(g, nID)
     return g
 end
@@ -128,13 +128,13 @@ end
 ```
 """
 function +(g1::StaticGraph, g2::StaticGraph)
-    nID = append!(g1, insertion(g1), g2)
-    update_insertion!(g1, insertion(g2))
+    nID = append!(g1, insertion_id(g1), g2)
+    update_insertion!(g1, insertion_id(g2))
     return g1
 end
 
 @unroll function +(g::StaticGraph, T::Tuple)
-    ins = insertion(g)
+    ins = insertion_id(g)
     @unroll for el in T
         g += el
         update_insertion!(g, ins)

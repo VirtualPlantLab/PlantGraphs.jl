@@ -57,10 +57,10 @@ let
 end
 ```
 """
-function traverse(g::Graph; fun = () -> nothing, order = "any", ID = root(g))
+function traverse(g::Graph; fun = () -> nothing, order = "any", ID = root_id(g))
     traverse(static_graph(g), fun = fun, order = order, ID = ID)
 end
-function traverse(g::StaticGraph; fun = () -> nothing, order = "any", ID = root(g))
+function traverse(g::StaticGraph; fun = () -> nothing, order = "any", ID = root_id(g))
     if order == "any"
         for val in values(nodes(g))
             fun(data(val))
@@ -74,7 +74,7 @@ function traverse(g::StaticGraph; fun = () -> nothing, order = "any", ID = root(
 end
 
 """
-    traverse_dfs(g::Graph; fun = () -> nothing, ID = root(g))
+    traverse_dfs(g::Graph; fun = () -> nothing, ID = root_id(g))
 
 Iterates over all the nodes in the graph (depth-first order, starting at a any
 node) and execute for the function `fun` on each node
@@ -129,7 +129,7 @@ let
 end
 ```
 """
-function traverse_dfs(g::Graph; fun = () -> nothing, ID = root(g))
+function traverse_dfs(g::Graph; fun = () -> nothing, ID = root_id(g))
     traverse_dfs(static_graph(g), fun, ID)
 end
 
@@ -151,7 +151,7 @@ function traverse_dfs(g::StaticGraph, fun, ID)
 end
 
 """
-    traverse_bfs(g::Graph; fun = () -> nothing, ID = root(g))
+    traverse_bfs(g::Graph; fun = () -> nothing, ID = root_id(g))
 
 Iterates over all the nodes in the graph (breadth-first order, starting at a any
 node) and execute for the function `fun` on each node
@@ -206,7 +206,7 @@ let
 end
 ```
 """
-function traverse_bfs(g::Graph; fun = () -> nothing, ID = root(g))
+function traverse_bfs(g::Graph; fun = () -> nothing, ID = root_id(g))
     traverse_bfs(static_graph(g), fun, ID)
 end
 

@@ -115,11 +115,11 @@ traverse(g::Graph; fun = () -> nothing)
 ```
 
 ```@docs
-traverse_dfs(g::Graph; fun = () -> nothing, ID = root(g))
+traverse_dfs(g::Graph; fun = () -> nothing, ID = root_id(g))
 ```
 
 ```@docs
-traverse_bfs(g::Graph; fun = () -> nothing, ID = root(g))
+traverse_bfs(g::Graph; fun = () -> nothing, ID = root_id(g))
 ```
 
 ## Graph visualization

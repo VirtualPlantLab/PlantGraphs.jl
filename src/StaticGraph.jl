@@ -55,21 +55,21 @@ end
 #=
 Root
 =#
-root(g::StaticGraph) = g.root
-update_root!(g, ID) = g.root = ID
-rootNode(g) = g[g.root]
+root_id(g::StaticGraph) = g.root
+update_root!(g::StaticGraph, ID) = g.root = ID
+root(g::StaticGraph) = g[root_id(g)]
 
 #=
 Insertion
 =#
-insertion(g::StaticGraph) = g.insertion
-update_insertion!(g, ID) = g.insertion = ID
-insertion_node(g) = g[g.insertion]
+insertion_id(g::StaticGraph) = g.insertion
+update_insertion!(g::StaticGraph, ID) = g.insertion = ID
+insertion(g::StaticGraph) = g[insertion_id(g)]
 
 #=
 GraphNode
 =#
-nodes(g) = g.nodes
+nodes(g::StaticGraph) = g.nodes
 has_node(g::StaticGraph, ID) = haskey(g.nodes, ID)
 length(g::StaticGraph) = length(g.nodes)
 remove_node!(g::StaticGraph, ID) = delete!(g.nodes, ID)

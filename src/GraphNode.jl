@@ -40,7 +40,7 @@ is_root(n::GraphNode) = !has_parent(n)
 
 function has_ancestor(node::GraphNode, g::Graph, condition, maxlevel::Int,
                       level::Int = 1)
-    root(g) == self_id(node) && return false, level
+    root_id(g) == self_id(node) && return false, level
     par = parent(node, g)
     if condition(Context(g, par))
         return true, level

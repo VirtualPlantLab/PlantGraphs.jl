@@ -26,7 +26,7 @@ let
     @test rules(algae)[1].lhs == rule1.lhs && rules(algae)[2].lhs == rule2.lhs
     @test rules(algae)[1].rhs == rule1.rhs && rules(algae)[2].rhs == rule2.rhs
     @test length(algae) == 1
-    @test VPLGraphs.root(algae) == VPLGraphs.insertion(algae)
+    @test VPLGraphs.root_id(algae) == VPLGraphs.insertion_id(algae)
     @test length(VPLGraphs.nodetypes(algae)) == 1
 
     # Match the rules against the graph
@@ -37,15 +37,15 @@ let
     # Check that rewrite did what was expected (node: only one rule is executed)
     @test length(algae) == 2
     @test length(VPLGraphs.nodetypes(algae)) == 2
-    @test VPLGraphs.root(algae) != VPLGraphs.insertion(algae)
-    @test VPLGraphs.rootNode(algae).data isa GT.A
-    @test VPLGraphs.insertion_node(algae).data isa GT.B
+    @test VPLGraphs.root_id(algae) != VPLGraphs.insertion_id(algae)
+    @test VPLGraphs.root(algae).data isa GT.A
+    @test VPLGraphs.insertion(algae).data isa GT.B
 
     # Execute the rules a second time (make sure both rules are executed)
     rewrite!(algae)
 
     # Check the growth of the graph and the right order of nodes
     @test length(algae) == 3
-    @test VPLGraphs.rootNode(algae).data isa GT.A
-    @test VPLGraphs.insertion_node(algae).data isa GT.A
+    @test VPLGraphs.root(algae).data isa GT.A
+    @test VPLGraphs.insertion(algae).data isa GT.A
 end
