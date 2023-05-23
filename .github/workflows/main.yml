@@ -25,6 +25,7 @@ jobs:
         with:
           version: ${{ matrix.version }}
           arch: ${{ matrix.arch }}
+      - run: julia --project -e 'using Pkg; Pkg.add(; url="https://github.com/VirtualPlantLab/VPLGraphAPI.jl.git")'
       - uses: julia-actions/julia-runtest@latest
       - uses: julia-actions/julia-uploadcodecov@latest
         env:
