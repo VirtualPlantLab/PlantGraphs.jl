@@ -44,7 +44,7 @@ let
 end
 ```
 """
-function Graph(; axiom::Union{StaticGraph, Node},
+function Graph(; axiom::Union{VPLStaticGraph, VPLNodeData},
                rules::Union{Nothing, Tuple, Rule} = nothing,
                data = nothing)
     if rules isa Nothing
