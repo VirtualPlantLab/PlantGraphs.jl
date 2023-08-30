@@ -40,12 +40,12 @@ within a rule or query.
 has_parent(c::Context) = has_parent(node(c))
 
 """
-    is_root(c::Context)
+    isroot(c::Context)
 
 Check if a node is the root of the graph (i.e., has no parent) and return `true` or
 `false`. Intended to be used within a rule or query.
 """
-is_root(c::Context) = !has_parent(c)
+isroot(c::Context) = !has_parent(c)
 
 """
     has_ancestor(c::Context; condition = x -> true, max_level::Int = typemax(Int))
@@ -106,23 +106,23 @@ function has_ancestor(c::Context; condition = x -> true, max_level::Int = typema
 end
 
 """
-    has_children(c::Context)
+    haschildren(c::Context)
 
 Check if a node has at least one child and return `true` or `false`. Intended to be used
 within a rule or query.
 """
-has_children(c::Context) = has_children(node(c))
+haschildren(c::Context) = haschildren(node(c))
 
 """
-    is_leaf(c::Context)
+    isleaf(c::Context)
 
 Check if a node is a leaf in the graph (i.e., has no children) and return `true` or
 `false`. Intended to be used within a rule or query.
 """
-is_leaf(c::Context) = !has_children(c)
+isleaf(c::Context) = !haschildren(c)
 
 """
-    has_descendant(c::Context; condition = x -> true, max_level::Int = typemax(Int))
+    hasdescendant(c::Context; condition = x -> true, max_level::Int = typemax(Int))
 
 Check if a node has a descendant that matches the optional condition. Intended to be used
 within a rule or query.
@@ -142,7 +142,7 @@ leaves of the graph until a node is found for which `condition` returns `true`.
 If no node meets the condition, then it will return `false`. The defaults values
 for this function are such that the algorithm always returns `true`
 after one step (unless it is applied to a leaf node) in which case it is
-equivalent to calling `has_children` on the node.
+equivalent to calling `haschildren` on the node.
 
 The number of levels that the algorithm is allowed to traverse is capped by
 `max_level` (mostly to avoid excessive computation, though the user may want to
@@ -164,7 +164,7 @@ let
     axiom = A1(2) + (B1(1) + A1(3), B1(4))
     g = Graph(axiom = axiom)
     function qfun(n)
-        has_descendant(n, condition = x -> data(x).val == 1)[1]
+        hasdescendant(n, condition = x -> data(x).val == 1)[1]
     end
     Q1 = Query(A1, query = qfun)
     R1 = apply(g, Q1)
@@ -174,8 +174,8 @@ let
 end
 ```
 """
-function has_descendant(c::Context; condition = x -> true, max_level::Int = typemax(Int))
-    out = has_descendant(node(c), graph(c), condition, max_level, 1)
+function hasdescendant(c::Context; condition = x -> true, max_level::Int = typemax(Int))
+    out = hasdescendant(node(c), graph(c), condition, max_level, 1)
     return out
 end
 
@@ -290,7 +290,7 @@ function children(c::Context)
 end
 
 """
-    descendant(c::Context; condition = x -> true, max_level::Int = typemax(Int))
+    getdescendant(c::Context; condition = x -> true, max_level::Int = typemax(Int))
 
 Returns the first descendant of a node that matches the `condition`. Intended to
 be used within a rule or query.
@@ -305,8 +305,8 @@ and returns `true` or `false`.
 traversing the graph.
 
 ## Details
-If `has_descendant()` returns `false` for the same node and `condition`,
-`descendant()` will return `missing`, otherwise it returns the `Context`
+If `hasdescendant()` returns `false` for the same node and `condition`,
+`getdescendant()` will return `missing`, otherwise it returns the `Context`
 associated to the matching node.
 
 ## Return
@@ -320,7 +320,7 @@ let
     axiom = A1(1) + (B1(1) + A1(3), B1(4))
     g = Graph(axiom = axiom)
     function qfun(n)
-        na = descendant(n, condition = x -> (data(x).val == 1))
+        na = getdescendant(n, condition = x -> (data(x).val == 1))
         if !ismissing(na)
             data(na) isa B1
         else
@@ -335,8 +335,8 @@ let
 end
 ```
 """
-function descendant(c::Context; condition = x -> true, max_level::Int = typemax(Int))
-    desc = descendant(node(c), graph(c), condition, max_level, 1)
+function getdescendant(c::Context; condition = x -> true, max_level::Int = typemax(Int))
+    desc = getdescendant(node(c), graph(c), condition, max_level, 1)
     out = Context(graph(c), desc)
     return out
 end

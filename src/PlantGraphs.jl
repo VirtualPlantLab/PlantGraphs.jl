@@ -1,17 +1,14 @@
-module VPLGraphs
+module PlantGraphs
 
-# Public API of VPLGraph
-export VPLGraphData, Node, Graph, Rule, Query, rewrite!, apply, data, rules, graph,
+# Public API of PlantGraph
+export Node, Graph, Rule, Query, rewrite!, apply, data, rules, graph,
        static_graph, data, graph_data, parent,
-       has_parent, has_ancestor, ancestor, is_root, root, has_children, has_descendant,
-       children, descendant, is_leaf, traverse, traverse_dfs, traverse_bfs, draw,
+       has_parent, has_ancestor, ancestor, isroot, getroot, haschildren, hasdescendant,
+       children, getdescendant, isleaf, traverse, traversedfs, traversebfs, draw,
        calculate_resolution, node_label
 
 # API for VPL-style graphs
-import VPLGraphAPI: VPLGraph, VPLStaticGraph, VPLGraphNode, VPLGraphData, VPLNodeData, data,
-                    is_root, root, has_parent, has_ancestor, ancestor, is_leaf,
-                    has_children,
-                    children, has_descendant, descendant, traverse
+import AbstractTrees: isroot, getroot, children, getdescendant
 
 # Base functions that will be extended
 import Base: copy, length, empty!, append!, +, getindex, setindex!, show, Tuple, parent
@@ -24,7 +21,7 @@ import Graphs as GR
 import GraphMakie as GM
 import NetworkLayout as NL
 
-# Source code of VPLGraph
+# Source code of PlantGraph
 include("Types.jl")
 include("GraphNode.jl")
 include("Context.jl")

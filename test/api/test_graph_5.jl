@@ -1,4 +1,4 @@
-using VPLGraphs
+using PlantGraphs
 using Test
 include("types.jl")
 import .GT

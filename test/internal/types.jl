@@ -1,7 +1,7 @@
 # User-defined types for testing the package
 module GT
 
-using VPLGraphs
+using PlantGraphs
 
 struct bar <: Node
     x::Int

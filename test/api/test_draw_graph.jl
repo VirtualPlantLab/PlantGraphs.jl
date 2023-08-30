@@ -1,4 +1,4 @@
-using VPLGraphs
+using PlantGraphs
 using Test
 using CairoMakie
 include("types.jl")
@@ -7,8 +7,8 @@ import .GT
 let
     # Test that drawing works (here we just check that the function runs without error for
     # different types of inputs)
-    VPLGraphs.node_label(n::GT.A, id) = "A"
-    VPLGraphs.node_label(n::GT.B, id) = "B"
+    PlantGraphs.node_label(n::GT.A, id) = "A"
+    PlantGraphs.node_label(n::GT.B, id) = "B"
     axiom = GT.A()
     fn = draw(axiom)
     rule1 = Rule(GT.A, rhs = x -> GT.A() + GT.B())

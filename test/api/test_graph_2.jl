@@ -1,4 +1,4 @@
-using VPLGraphs
+using PlantGraphs
 using Test
 include("types.jl")
 import .GT
@@ -16,12 +16,12 @@ let
 
     rule = Rule(GT.Cell{Int}, lhs = transfer,
                 rhs = (context, father) -> GT.Cell(data(father).state), captures = true)
-    @test VPLGraphs.captures(rule)
+    @test PlantGraphs.captures(rule)
 
     axiom = GT.Cell(1) + GT.Cell(0) + GT.Cell(0)
     pop = Graph(axiom = axiom, rules = rule)
 
-    getStates(pop) = [data(n).state for n in values(VPLGraphs.nodes(pop))]
+    getStates(pop) = [data(n).state for n in values(PlantGraphs.nodes(pop))]
     @test sum(getStates(pop)) == 1
     rewrite!(pop)
     @test sum(getStates(pop)) == 2
@@ -30,7 +30,7 @@ let
 
     # Cell transfer bottom to top
     function transferUp(context)
-        if has_children(context)
+        if haschildren(context)
             child = first(children(context))
             return (true, (child,))
         else

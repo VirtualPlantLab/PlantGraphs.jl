@@ -1,10 +1,10 @@
 ```@meta
-CurrentModule = VPLGraph
+CurrentModule = PlantGraph
 ```
 
-# VPLGraph
+# PlantGraph
 
-API documentation for [VPLGraphs](https://github.com/VirtualPlantGraph/VPLGraphs.jl).
+API documentation for [PlantGraphs](https://github.com/VirtualPlantGraph/PlantGraphs.jl).
 
 ## Types
 
@@ -21,7 +21,7 @@ Query
 ```
 
 ```@docs
-VPLNodeData
+Node
 ```
 
 ```@docs
@@ -31,11 +31,11 @@ Context
 ## Graph DSL
 
 ```@docs
-+(n1::VPLNodeData, n2::VPLNodeData)
-+(g::StaticGraph, n::VPLNodeData)
-+(n::VPLNodeData, g::StaticGraph)
++(n1::Node, n2::Node)
++(g::StaticGraph, n::Node)
++(n::Node, g::StaticGraph)
 +(g1::StaticGraph, g2::StaticGraph)
-+(n::VPLNodeData, T::Tuple)
++(n::Node, T::Tuple)
 ```
 
 ## Applying rules and queries
@@ -66,14 +66,14 @@ data(c::Context)
 data(c::Context)
 ```
 
-## VPLNodeData relations
+## Node relations
 
 ```@docs
 has_parent(c::Context)
 ```
 
 ```@docs
-is_root(c::Context)
+isroot(c::Context)
 ```
 
 ```@docs
@@ -89,15 +89,15 @@ ancestor(c::Context; condition = x -> true, maxlevel::Int = typemax(Int))
 ```
 
 ```@docs
-has_children(c::Context)
+haschildren(c::Context)
 ```
 
 ```@docs
-is_leaf(c::Context)
+isleaf(c::Context)
 ```
 
 ```@docs
-has_descendant(c::Context; condition = x -> true, maxlevel::Int = typemax(Int))
+hasdescendant(c::Context; condition = x -> true, maxlevel::Int = typemax(Int))
 ```
 
 ```@docs
@@ -105,7 +105,7 @@ children(c::Context)
 ```
 
 ```@docs
-descendant(c::Context; condition = x -> true, maxlevel::Int = typemax(Int))
+getdescendant(c::Context; condition = x -> true, maxlevel::Int = typemax(Int))
 ```
 
 # Traversal algorithms
@@ -115,11 +115,11 @@ traverse(g::Graph; fun = () -> nothing)
 ```
 
 ```@docs
-traverse_dfs(g::Graph; fun = () -> nothing, ID = root_id(g))
+traversedfs(g::Graph; fun = () -> nothing, ID = root_id(g))
 ```
 
 ```@docs
-traverse_bfs(g::Graph; fun = () -> nothing, ID = root_id(g))
+traversebfs(g::Graph; fun = () -> nothing, ID = root_id(g))
 ```
 
 ## Graph visualization
@@ -129,7 +129,7 @@ draw(g::Graph; force = false, inline = false, resolution = (1920, 1080),
     nlabels_textsize = 15, arrow_size = 15, node_size = 5)
 draw(g::StaticGraph; force = false, inline = false, resolution = (1920, 1080),
               nlabels_textsize = 15, arrow_size = 15, node_size = 5)
-node_label(n::VPLNodeData, id)
+node_label(n::Node, id)
 ```
 
 ```@docs

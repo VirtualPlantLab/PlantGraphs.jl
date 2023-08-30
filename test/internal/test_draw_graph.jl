@@ -1,4 +1,4 @@
-import VPLGraphs as V
+import PlantGraphs as V
 using Test
 
 include("types.jl")

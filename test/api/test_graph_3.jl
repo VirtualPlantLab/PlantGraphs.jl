@@ -1,4 +1,4 @@
-using VPLGraphs
+using PlantGraphs
 using Test
 using Suppressor
 include("types.jl")
@@ -46,12 +46,12 @@ let
 
     # Extract states from the organism using breadth-first traversal
     states = Rational{Int}[]
-    traverse_bfs(organism, fun = x -> push!(states, x.state))
+    traversebfs(organism, fun = x -> push!(states, x.state))
     @test states == [10 // 1 * 5 // 4 * 1 // 3, 10 // 1 * 5 // 4 * 2 // 3]
 
     # Extract states from the organism using depth-first traversal
     states = Rational{Int}[]
-    traverse_dfs(organism, fun = x -> push!(states, x.state))
+    traversedfs(organism, fun = x -> push!(states, x.state))
     @test states == [10 // 1 * 5 // 4 * 1 // 3, 10 // 1 * 5 // 4 * 2 // 3]
 
     # Extract organism using traversal with arbitrary order
@@ -64,12 +64,12 @@ let
 
     # Extract states from the organism using breadth-first traversal
     states = Rational{Int}[]
-    traverse_bfs(organism, fun = x -> push!(states, x.state))
+    traversebfs(organism, fun = x -> push!(states, x.state))
     @test states == [125 // 72, 125 // 36, 125 // 36, 125 // 18]
 
     # Extract states from the organism using depth-first traversal
     states = Rational{Int}[]
-    traverse_dfs(organism, fun = x -> push!(states, x.state))
+    traversedfs(organism, fun = x -> push!(states, x.state))
     @test sort(states) == [125 // 72, 125 // 36, 125 // 36, 125 // 18]
 
     ### Growth & death models ###

@@ -18,7 +18,7 @@ let
 end
 ```
 """
-abstract type Node <: VPLNodeData end
+abstract type Node end
 
 #=
   GraphNode{T}
@@ -30,7 +30,7 @@ to the type of data stored in the node (defined by the user). User do not  build
 build `GraphNode` objects directly, this is always handled by VPL when creating
 or modifying a graph.
 =#
-mutable struct GraphNode{T <: Node} <: VPLGraphNode
+mutable struct GraphNode{T <: Node}
     data::T
     children_id::Set{Int}
     parent_id::Union{Int, Missing}
@@ -47,7 +47,7 @@ rules or graph-level variables.
 Users do not build `StaticGraph` objects directly but rather they are created by
 VPL through the graph construction DSL (see User Manual for details).
 =#
-mutable struct StaticGraph <: VPLStaticGraph
+mutable struct StaticGraph
     nodes::Dict{Int, GraphNode}
     nodetypes::Dict{DataType, Set{Int}}
     root::Int
@@ -60,10 +60,10 @@ end
   All rules are stored in a dictionary which keys are the unique identifiers of the rules
   The field data contains a struct with variables that are accesible in queries and production rules
 =#
-mutable struct Graph{T <: Union{Nothing, VPLGraphData}, S <: Tuple} <: VPLGraph
+mutable struct Graph{D, S <: Tuple}
     graph::StaticGraph
     rules::S
-    data::T
+    data::D
 end
 
 # Docstring is included in the constructor in Rule.jl

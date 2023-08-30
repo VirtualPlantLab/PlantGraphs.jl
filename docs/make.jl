@@ -1,15 +1,15 @@
-using VPLGraphs
+using PlantGraphs
 using Documenter
 using DocumenterMarkdown
 
-# DocMeta.setdocmeta!(VPLGraph, :DocTestSetup, :(using VPLGraphs); recursive=true)
+# DocMeta.setdocmeta!(PlantGraph, :DocTestSetup, :(using PlantGraphs); recursive=true)
 
 makedocs(;
-         modules = [VPLGraphs],
+         modules = [PlantGraphs],
          format = Markdown(),
          authors = "Alejandro Morales Sierra <alejandro.moralessierra@wur.nl> and contributors",
-         repo = "https://github.com/VirtualPlantLab/VPLGraphs.jl/blob/{commit}{path}#{line}",
-         sitename = "VPLGraphs.jl",
+         repo = "https://github.com/VirtualPlantLab/PlantGraphs.jl/blob/{commit}{path}#{line}",
+         sitename = "PlantGraphs.jl",
          # format=Documenter.HTML(;
          #     prettyurls=get(ENV, "CI", "false") == "true",
          #     edit_link="master",

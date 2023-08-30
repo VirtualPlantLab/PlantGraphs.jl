@@ -1,7 +1,7 @@
 # User-defined types for testing the package
 module GT
 
-using VPLGraphs
+using PlantGraphs
 
 struct bar <: Node
     x::Int
@@ -15,7 +15,7 @@ mutable struct Cell{T} <: Node
     state::T
 end
 
-struct G3pars <: VPLGraphData
+struct G3pars
     division::Rational{Int}
     growth::Rational{Int}
 end

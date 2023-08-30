@@ -1,4 +1,4 @@
-import VPLGraphs as V
+import PlantGraphs as V
 using Test
 include("types.jl")
 import .GT
@@ -31,13 +31,13 @@ let
     @test ismissing(V.parent_id(n))
 
     # The resulting node should be root and leaf
-    @test V.is_leaf(n)
-    @test V.is_root(n)
+    @test V.isleaf(n)
+    @test V.isroot(n)
 
     # Retrieve data stored inside the node
     @test V.data(n) === GT.A()
 
     # Make sure that the copied node was independent
-    @test V.has_children(n2)
+    @test V.haschildren(n2)
     @test V.has_parent(n2)
 end

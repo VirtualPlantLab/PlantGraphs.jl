@@ -4,7 +4,7 @@
 ############################### Constructors ###################################
 ################################################################################
 
-GraphNode(data::VPLNodeData) = GraphNode(data, Set{Int}(), missing, -1)
+GraphNode(data::Node) = GraphNode(data, Set{Int}(), missing, -1)
 
 ################################################################################
 ################################## Getters #####################################
@@ -36,7 +36,7 @@ change_id!(n::GraphNode, id::Int) = n.self_id = id
  recursive search (with maximum depth)
 =#
 has_parent(n::GraphNode) = !ismissing(n.parent_id)
-is_root(n::GraphNode) = !has_parent(n)
+isroot(n::GraphNode) = !has_parent(n)
 
 function has_ancestor(node::GraphNode, g::Graph, condition, maxlevel::Int,
                       level::Int = 1)
@@ -57,17 +57,17 @@ end
  Check if GraphNode has a child or a descendant that fits a condition with optional
  recursive search (with maximum depth)
 =#
-has_children(n::GraphNode) = !isempty(n.children_id)
-is_leaf(n::GraphNode) = !has_children(n)
+haschildren(n::GraphNode) = !isempty(n.children_id)
+isleaf(n::GraphNode) = !haschildren(n)
 
-function has_descendant(node::GraphNode, g::Graph, condition, maxlevel::Int,
+function hasdescendant(node::GraphNode, g::Graph, condition, maxlevel::Int,
                         level::Int = 1)
     for child in children(node, g)
         if condition(Context(g, child))
             return true, level
         else
             if level <= maxlevel
-                if has_descendant(child, g, condition, maxlevel, level + 1)[1]
+                if hasdescendant(child, g, condition, maxlevel, level + 1)[1]
                     return true, level + 1
                 end
             end
@@ -85,7 +85,7 @@ end
  recursive search (with maximum depth)
 =#
 function parent(n::GraphNode, g::Graph, nsteps::Int = 1)
-    is_root(n) && (return missing)
+    isroot(n) && (return missing)
     if (nsteps == 1)
         out = g[parent_id(n)]
     else
@@ -99,7 +99,7 @@ parent(n::GraphNode, g::StaticGraph) = g[parent_id(n)]
 
 function ancestor(node::GraphNode, g::Graph, condition, maxlevel::Int,
                   level::Int = 1)
-    is_root(node) && (return missing)
+    isroot(node) && (return missing)
     par = parent(node, g)
     if condition(Context(g, par))
         return par
@@ -115,13 +115,13 @@ end
 =#
 children(n::GraphNode, g::StaticGraph) = (g[id] for id in children_id(n))
 
-function descendant(node::GraphNode, g::Graph, condition, maxlevel::Int,
+function getdescendant(node::GraphNode, g::Graph, condition, maxlevel::Int,
                     level::Int = 1)
     for child in children(node, g)
         if condition(Context(g, child))
             return child
         elseif level <= maxlevel
-            return descendant(child, g, condition, maxlevel, level + 1)
+            return getdescendant(child, g, condition, maxlevel, level + 1)
         end
     end
     return missing # This means we tested on a leaf node

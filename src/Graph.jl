@@ -44,7 +44,7 @@ let
 end
 ```
 """
-function Graph(; axiom::Union{VPLStaticGraph, VPLNodeData},
+function Graph(; axiom::Union{StaticGraph, Node},
                rules::Union{Nothing, Tuple, Rule} = nothing,
                data = nothing)
     if rules isa Nothing
@@ -131,7 +131,7 @@ end
 @forwardgraph length
 @forwardgraph nodetypes
 @forwardgraph root_id
-@forwardgraph root
+@forwardgraph getroot
 @forwardgraph insertion_id
 @forwardgraph insertion
 @forwardgraph nodes

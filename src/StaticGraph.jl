@@ -57,7 +57,7 @@ Root
 =#
 root_id(g::StaticGraph) = g.root
 update_root!(g::StaticGraph, ID) = g.root = ID
-root(g::StaticGraph) = g[root_id(g)]
+getroot(g::StaticGraph) = g[root_id(g)]
 
 #=
 Insertion
