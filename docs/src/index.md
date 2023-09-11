@@ -1,10 +1,8 @@
 ```@meta
-CurrentModule = PlantGraph
+CurrentModule = PlantGraphs
 ```
 
-# PlantGraph
-
-API documentation for [PlantGraphs](https://github.com/VirtualPlantGraph/PlantGraphs.jl).
+# Graphs
 
 ## Types
 
@@ -63,7 +61,7 @@ data(c::Context)
 ```
 
 ```@docs
-data(c::Context)
+graph_data(c::Context)
 ```
 
 ## Node relations
