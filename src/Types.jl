@@ -8,14 +8,15 @@ the graph construction DSL.
 
 # Example
 ```jldoctest
-let
-  struct bar <: Node
-    x::Int
-  end
-  b1 = bar(1)
-  b2 = bar(2)
-  b1 + b2
-end
+julia> let
+         struct bar <: Node
+           x::Int
+         end
+         b1 = bar(1)
+         b2 = bar(2)
+         b1 + b2
+       end
+PlantGraphs.StaticGraph(Dict{Int64, PlantGraphs.GraphNode}(129 => PlantGraphs.GraphNode{bar}(bar(1), Set([130]), missing, 129), 130 => PlantGraphs.GraphNode{bar}(bar(2), Set{Int64}(), 129, 130)), Dict{DataType, Set{Int64}}(bar => Set([129, 130])), 129, 130)
 ```
 """
 abstract type Node end

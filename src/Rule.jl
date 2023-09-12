@@ -30,14 +30,14 @@ An object of type `Rule`.
 
 ## Examples
 ```jldoctest
-let
-    struct A <: Node end
-    struct B <: Node end
-    axiom = A() + B()
-    rule = Rule(A, rhs = x -> A() + B())
-    rules_graph = Graph(axiom = axiom, rules = rule)
-    rewrite!(rules_graph)
-end
+julia> let
+           struct A <: Node end
+           struct B <: Node end
+           axiom = A() + B()
+           rule = Rule(A, rhs = x -> A() + B())
+           rules_graph = Graph(axiom = axiom, rules = rule)
+           rewrite!(rules_graph)
+           end
 ```
 """
 function Rule(nodetype::DataType; lhs = x -> true, rhs = x -> nothing,
@@ -184,14 +184,14 @@ by the execution of the rules.
 
 # Examples
 ```jldoctest
-let
-    struct A <: Node end
-    struct B <: Node end
-    axiom = A() + B()
-    rule = Rule(A, rhs = x -> A() + B())
-    g = Graph(axiom = axiom, rules = rule)
-    rewrite!(g)
-end
+julia> let
+           struct A <: Node end
+           struct B <: Node end
+           axiom = A() + B()
+           rule = Rule(A, rhs = x -> A() + B())
+           g = Graph(axiom = axiom, rules = rule)
+           rewrite!(g)
+       end
 ```
 """
 rewrite!(g::Graph) = rewrite!(g, g.rules)

@@ -40,21 +40,26 @@ This function returns nothing but `fun` may have side-effects.
 
 ## Examples
 ```jldoctest
-let
-    struct A1 <: Node val::Int end
-    struct B1 <: Node val::Int end
-    struct Foo
-        vals::Vector{Int}
-    end
-    function (f::Foo)(x)
-        push!(f.vals, x.val)
-    end
-    f = Foo(Int[])
-    axiom = A1(2) + (B1(1) + A1(3), B1(4))
-    g = Graph(axiom = axiom)
-    traverse(g, fun = f)
-    f.vals
-end
+julia> let
+           struct A1 <: Node val::Int end
+           struct B1 <: Node val::Int end
+           struct Foo
+               vals::Vector{Int}
+           end
+           function (f::Foo)(x)
+                   push!(f.vals, x.val)
+           end
+           f = Foo(Int[])
+               axiom = A1(2) + (B1(1) + A1(3), B1(4))
+                   g = Graph(axiom = axiom)
+           traverse(g, fun = f)
+           f.vals
+       end
+4-element Vector{Int64}:
+ 4
+ 3
+ 2
+ 1
 ```
 """
 function traverse(g::Graph; fun = () -> nothing, order = "any", ID = root_id(g))
@@ -112,21 +117,26 @@ This function returns nothing but `fun` may have side-effects.
 
 ## Examples
 ```jldoctest
-let
-    struct A1 <: Node val::Int end
-    struct B1 <: Node val::Int end
-    struct Foo
-        vals::Vector{Int}
-    end
-    function (f::Foo)(x)
-        push!(f.vals, x.val)
-    end
-    f = Foo(Int[])
-    axiom = A1(2) + (B1(1) + A1(3), B1(4))
-    g = Graph(axiom = axiom)
-    traversedfs(g, fun = f)
-    f.vals
-end
+julia> let
+           struct A1 <: Node val::Int end
+           struct B1 <: Node val::Int end
+           struct Foo
+               vals::Vector{Int}
+           end
+           function (f::Foo)(x)
+                   push!(f.vals, x.val)
+           end
+           f = Foo(Int[])
+           axiom = A1(2) + (B1(1) + A1(3), B1(4))
+               g = Graph(axiom = axiom)
+           traversedfs(g, fun = f)
+           f.vals
+       end
+4-element Vector{Int64}:
+ 2
+ 4
+ 1
+ 3
 ```
 """
 function traversedfs(g::Graph; fun = () -> nothing, ID = root_id(g))
@@ -189,21 +199,26 @@ This function returns nothing but `fun` may have side-effects.
 
 ## Examples
 ```jldoctest
-let
-    struct A1 <: Node val::Int end
-    struct B1 <: Node val::Int end
-    struct Foo
-        vals::Vector{Int}
-    end
-    function (f::Foo)(x)
-        push!(f.vals, x.val)
-    end
-    f = Foo(Int[])
-    axiom = A1(2) + (B1(1) + A1(3), B1(4))
-    g = Graph(axiom = axiom)
-    traversebfs(g, fun = f)
-    f.vals
-end
+julia> let
+           struct A1 <: Node val::Int end
+           struct B1 <: Node val::Int end
+           struct Foo
+               vals::Vector{Int}
+           end
+           function (f::Foo)(x)
+               push!(f.vals, x.val)
+           end
+           f = Foo(Int[])
+               axiom = A1(2) + (B1(1) + A1(3), B1(4))
+                   g = Graph(axiom = axiom)
+           traversebfs(g, fun = f)
+           f.vals
+       end
+4-element Vector{Int64}:
+ 2
+ 1
+ 4
+ 3
 ```
 """
 function traversebfs(g::Graph; fun = () -> nothing, ID = root_id(g))

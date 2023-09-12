@@ -1,5 +1,6 @@
 using PlantGraphs
 using Test
+using Documenter
 import Aqua
 
 # Aqua
@@ -7,6 +8,10 @@ import Aqua
     Aqua.test_all(PlantGraphs, ambiguities = false)
     Aqua.test_ambiguities([PlantGraphs])
 end
+
+# Test examples on documentation (jldoctest blocks)
+@testset "Documentation tests" begin doctest(PlantGraphs) end
+
 # Internal tests
 @testset "Graph node" begin include("internal/test_graphnode.jl") end
 @testset "Static graph" begin include("internal/test_staticgraph.jl") end

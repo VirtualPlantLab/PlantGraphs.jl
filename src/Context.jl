@@ -84,20 +84,21 @@ the number of levels in the graph separating the node an its ancestor.
 
 ## Examples
 ```jldoctest
-let
-    struct A1 <: Node val::Int end
-    struct B1 <: Node val::Int end
-    axiom = A1(2) + (B1(1) + A1(3), B1(4))
-    g = Graph(axiom = axiom)
-    function qfun(n)
-        has_ancestor(n, condition = x -> data(x).val == 1)[1]
-    end
-    Q1 = Query(A1, query = qfun)
-    R1 = apply(g, Q1)
-    Q2 = Query(B1, query = qfun)
-    R2 = apply(g, Q2)
-    (R1,R2)
-end
+julia> let
+           struct A1 <: Node val::Int end
+           struct B1 <: Node val::Int end
+           axiom = A1(2) + (B1(1) + A1(3), B1(4))
+           g = Graph(axiom = axiom)
+               function qfun(n)
+               has_ancestor(n, condition = x -> data(x).val == 1)[1]
+           end
+           Q1 = Query(A1, condition = qfun)
+           R1 = apply(g, Q1)
+               Q2 = Query(B1, condition = qfun)
+           R2 = apply(g, Q2)
+           (R1,R2)
+       end
+(A1[A1(3)], B1[])
 ```
 """
 function has_ancestor(c::Context; condition = x -> true, max_level::Int = typemax(Int))
@@ -158,20 +159,21 @@ the number of levels in the graph separating the node an its ancestor.
 
 ## Examples
 ```jldoctest
-let
-    struct A1 <: Node val::Int end
-    struct B1 <: Node val::Int end
-    axiom = A1(2) + (B1(1) + A1(3), B1(4))
-    g = Graph(axiom = axiom)
-    function qfun(n)
-        hasdescendant(n, condition = x -> data(x).val == 1)[1]
-    end
-    Q1 = Query(A1, query = qfun)
-    R1 = apply(g, Q1)
-    Q2 = Query(B1, query = qfun)
-    R2 = apply(g, Q2)
-    (R1,R2)
-end
+julia> let
+           struct A1 <: Node val::Int end
+           struct B1 <: Node val::Int end
+           axiom = A1(2) + (B1(1) + A1(3), B1(4))
+           g = Graph(axiom = axiom)
+               function qfun(n)
+               hasdescendant(n, condition = x -> data(x).val == 1)[1]
+           end
+           Q1 = Query(A1, condition = qfun)
+           R1 = apply(g, Q1)
+           Q2 = Query(B1, condition = qfun)
+           R2 = apply(g, Q2)
+           (R1,R2)
+       end
+(A1[A1(2)], B1[])
 ```
 """
 function hasdescendant(c::Context; condition = x -> true, max_level::Int = typemax(Int))
@@ -205,25 +207,28 @@ Return a `Context` object or `missing`.
 
 ## Examples
 ```jldoctest
-let
-    struct A1 <: Node val::Int end
-    struct B1 <: Node val::Int end
-    axiom = A1(2) + (B1(1) + A1(3), B1(4))
-    g = Graph(axiom = axiom)
-    function qfun(n)
-        np = parent(n, nsteps = 2)
-        !ismissing(np) && data(np).val == 2
-    end
-    Q1 = Query(A1, query = qfun)
-    R1 = apply(g, Q1)
-    Q2 = Query(B1, query = qfun)
-    R2 = apply(g, Q2)
-    (R1,R2)
-end
+julia> let
+           struct A1 <: Node val::Int end
+           struct B1 <: Node val::Int end
+           axiom = A1(2) + (B1(1) + A1(3), B1(4))
+           g = Graph(axiom = axiom)
+               function qfun(n)
+               np = parent(n, nsteps = 2)
+               !ismissing(np) && data(np).val == 2
+           end
+           Q1 = Query(A1, condition = qfun)
+           R1 = apply(g, Q1)
+           Q2 = Query(B1, condition = qfun)
+           R2 = apply(g, Q2)
+           (R1,R2)
+       end
+(A1[A1(3)], B1[])
 ```
 """
 function parent(c::Context; nsteps::Int = 1)
-    out = Context(graph(c), parent(node(c), graph(c), nsteps))
+    parent_node = parent(node(c), graph(c), nsteps)
+    ismissing(parent_node) && return missing
+    out = Context(graph(c), parent_node)
     return out
 end
 
@@ -252,29 +257,31 @@ Return a `Context` object or `missing`.
 
 ## Examples
 ```jldoctest
-let
-    struct A1 <: Node val::Int end
-    struct B1 <: Node val::Int end
-    axiom = A1(1) + (B1(1) + A1(3), B1(4))
-    g = Graph(axiom = axiom)
-    function qfun(n)
-        na = ancestor(n, condition = x -> (data(x).val == 1))
-        if !ismissing(na)
-            data(na) isa B1
-        else
-            false
-        end
-    end
-    Q1 = Query(A1, query = qfun)
-    R1 = apply(g, Q1)
-    Q2 = Query(B1, query = qfun)
-    R2 = apply(g, Q2)
-    (R1,R2)
-end
+julia> let
+           struct A1 <: Node val::Int end
+           struct B1 <: Node val::Int end
+           axiom = A1(1) + (B1(1) + A1(3), B1(4))
+           g = Graph(axiom = axiom)
+               function qfun(n)
+               na = ancestor(n, condition = x -> (data(x).val == 1))
+               if !ismissing(na)
+                   data(na) isa B1
+               else
+                   false
+               end
+           end
+           Q1 = Query(A1, condition = qfun)
+           R1 = apply(g, Q1)
+           Q2 = Query(B1, condition = qfun)
+           R2 = apply(g, Q2)
+           (R1,R2)
+       end
+(A1[A1(3)], B1[])
 ```
 """
 function ancestor(c::Context; condition = x -> true, max_level::Int = typemax(Int))
     anc = ancestor(node(c), graph(c), condition, max_level, 1)
+    ismissing(anc) && return missing
     out = Context(graph(c), anc)
     return out
 end
@@ -314,29 +321,31 @@ Return a `Context` object or `missing`.
 
 ## Examples
 ```jldoctest
-let
-    struct A1 <: Node val::Int end
-    struct B1 <: Node val::Int end
-    axiom = A1(1) + (B1(1) + A1(3), B1(4))
-    g = Graph(axiom = axiom)
-    function qfun(n)
-        na = getdescendant(n, condition = x -> (data(x).val == 1))
-        if !ismissing(na)
-            data(na) isa B1
-        else
-            false
-        end
-    end
-    Q1 = Query(A1, query = qfun)
-    R1 = apply(g, Q1)
-    Q2 = Query(B1, query = qfun)
-    R2 = apply(g, Q2)
-    (R1,R2)
-end
+julia> let
+           struct A1 <: Node val::Int end
+           struct B1 <: Node val::Int end
+           axiom = A1(1) + (B1(1) + A1(3), B1(4))
+           g = Graph(axiom = axiom)
+               function qfun(n)
+               na = getdescendant(n, condition = x -> (data(x).val == 1))
+               if !ismissing(na)
+                   data(na) isa B1
+               else
+                   false
+               end
+           end
+           Q1 = Query(A1, condition = qfun)
+           R1 = apply(g, Q1)
+           Q2 = Query(B1, condition = qfun)
+           R2 = apply(g, Q2)
+           (R1,R2)
+       end
+(A1[A1(1)], B1[])
 ```
 """
 function getdescendant(c::Context; condition = x -> true, max_level::Int = typemax(Int))
     desc = getdescendant(node(c), graph(c), condition, max_level, 1)
+    ismissing(desc) && return missing
     out = Context(graph(c), desc)
     return out
 end

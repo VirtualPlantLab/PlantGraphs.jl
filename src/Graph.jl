@@ -34,14 +34,15 @@ results in a human-readable description of the type of data stored in the graph.
 
 ## Examples
 ```jldoctest
-let
-    struct A0 <: Node end
-    struct B0 <: Node end
-    axiom = A0() + B0()
-    no_rules_graph = Graph(axiom = axiom)
-    rule = Rule(A, rhs = x -> A0() + B0())
-    rules_graph = Graph(axiom = axiom, rules = rule)
-end
+julia> let
+           struct A0 <: Node end
+           struct B0 <: Node end
+           axiom = A0() + B0()
+           no_rules_graph = Graph(axiom = axiom)
+           rule = Rule(A0, rhs = x -> A0() + B0())
+           rules_graph = Graph(axiom = axiom, rules = rule)
+       end
+Dynamic graph with 2 nodes of types A0,B0 and 1 rewriting rules.
 ```
 """
 function Graph(; axiom::Union{StaticGraph, Node},
@@ -66,12 +67,22 @@ Returns a tuple with all the graph-rewriting rules stored in a dynamic graph
 
 ## Examples
 ```jldoctest
-struct A <: Node end
-struct B <: Node end
-axiom = A() + B()
-rule = Rule(A, rhs = x -> A() + B())
-rules_graph = Graph(axiom, rules = rule)
-rules(rules_graph)
+julia> struct A <: Node end
+
+julia> struct B <: Node end
+
+julia> axiom = A() + B()
+PlantGraphs.StaticGraph(Dict{Int64, PlantGraphs.GraphNode}(90 => PlantGraphs.GraphNode{B}(B(), Set{Int64}(), 89, 90), 89 => PlantGraphs.GraphNode{A}(A(), Set([90]), missing, 89)), Dict{DataType, Set{Int64}}(A => Set([89]), B => Set([90])), 89, 90)
+
+julia> rule = Rule(A, rhs = x -> A() + B())
+Rule replacing nodes of type A without context capturing.
+
+julia> rules_graph = Graph(axiom = axiom, rules = rule)
+Dynamic graph with 2 nodes of types A,B and 1 rewriting rules.
+
+julia> rules(rules_graph)
+(Rule replacing nodes of type A without context capturing.
+,)
 ```
 """
 rules(g::Graph) = g.rules
@@ -83,10 +94,17 @@ Returns the graph-level variables.
 
 ## Example
 ```jldoctest
-struct A <: Node end
-axiom = A()
-graph = Graph(axiom, data = 2)
-data(graph)
+julia> struct A <: Node end
+
+julia> axiom = A()
+A()
+
+julia> g = Graph(axiom = axiom, data = 2)
+Dynamic graph with 1 nodes of types A and 0 rewriting rules.
+Dynamic graph variables stored in struct of type Int64+
+
+julia> data(g)
+2
 ```
 """
 data(g::Graph) = g.data

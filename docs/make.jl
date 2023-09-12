@@ -2,7 +2,7 @@ using PlantGraphs
 using Documenter
 using DocumenterMarkdown
 
-# DocMeta.setdocmeta!(PlantGraph, :DocTestSetup, :(using PlantGraphs); recursive=true)
+DocMeta.setdocmeta!(PlantGraphs, :DocTestSetup, :(using PlantGraphs); recursive=true)
 
 makedocs(;
          modules = [PlantGraphs],

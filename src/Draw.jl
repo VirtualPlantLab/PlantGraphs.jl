@@ -130,12 +130,13 @@ This function returns a Makie `Figure` object, while producing the visualization
 as a side effect.
 
 ## Examples
-```jldoctest
+```julia
 let
     struct A1 <: Node val::Int end
     struct B1 <: Node val::Int end
     axiom = A1(1) + (B1(1) + A1(3), B1(4))
     g = Graph(axiom = axiom)
+    import GLMakie # or CairoMakie, WGLMakie, etc.
     draw(g)
 end
 ```

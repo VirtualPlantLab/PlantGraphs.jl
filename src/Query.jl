@@ -31,12 +31,22 @@ dynamic graph.
 
 # Examples
 ```jldoctest
-struct A <: Node end
-struct B <: Node end
-axiom = A() + B()
-graph = Graph(axiom)
-query = Query(A)
-apply(graph, query)
+julia> struct A <: Node end
+
+julia> struct B <: Node end
+
+julia> axiom = A() + B()
+PlantGraphs.StaticGraph(Dict{Int64, PlantGraphs.GraphNode}(115 => PlantGraphs.GraphNode{A}(A(), Set([116]), missing, 115), 116 => PlantGraphs.GraphNode{B}(B(), Set{Int64}(), 115, 116)), Dict{DataType, Set{Int64}}(A => Set([115]), B => Set([116])), 115, 116)
+
+julia> g = Graph(axiom = axiom)
+Dynamic graph with 2 nodes of types A,B and 0 rewriting rules.
+
+julia> query = Query(A)
+Query object for nodes of type A
+
+julia> apply(g, query)
+1-element Vector{A}:
+ A()
 ```
 """
 Query(N::DataType; condition = x -> true) = Query{N, typeof(condition)}(condition)
@@ -68,12 +78,22 @@ the user.
 
 # Examples
 ```jldoctest
-struct A <: Node end
-struct B <: Node end
-axiom = A() + B()
-graph = Graph(axiom)
-query = Query(A)
-apply(graph, query)
+julia> struct A <: Node end
+
+julia> struct B <: Node end
+
+julia> axiom = A() + B()
+PlantGraphs.StaticGraph(Dict{Int64, PlantGraphs.GraphNode}(120 => PlantGraphs.GraphNode{B}(B(), Set{Int64}(), 119, 120), 119 => PlantGraphs.GraphNode{A}(A(), Set([120]), missing, 119)), Dict{DataType, Set{Int64}}(A => Set([119]), B => Set([120])), 119, 120)
+
+julia> g = Graph(axiom = axiom)
+Dynamic graph with 2 nodes of types A,B and 0 rewriting rules.
+
+julia> query = Query(A)
+Query object for nodes of type A
+
+julia> apply(g, query)
+1-element Vector{A}:
+ A()
 ```
 """
 function apply(g::Graph, query::Query{N, Q})::Vector{N} where {Q, N}
