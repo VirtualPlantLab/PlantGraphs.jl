@@ -38,6 +38,7 @@ julia> let
            rules_graph = Graph(axiom = axiom, rules = rule)
            rewrite!(rules_graph)
            end
+
 ```
 """
 function Rule(nodetype::DataType; lhs = x -> true, rhs = x -> nothing,
@@ -108,7 +109,7 @@ end
 #=
     Match a rule against a graph to identify which nodes will be replaced.
 =#
-function match_rule!(g::Graph, rule::Rule, assigned::Set{Int})
+function match_rule!(g::Graph, rule::Rule, assigned::OrderedSet{Int})
     # Reset the rule
     empty!(rule)
     N = nodetype(rule)
@@ -128,7 +129,7 @@ end
   Rules is needed as argument of the function in order for @unroll to work
 =#
 @inline @unroll function match_rules!(g::Graph, rules)
-    assigned = Set{Int}()
+    assigned = OrderedSet{Int}()
     # For each rule, match the nodes that meet the conditions of the query
     @unroll for rule in rules
         match_rule!(g, rule, assigned)
@@ -192,6 +193,7 @@ julia> let
            g = Graph(axiom = axiom, rules = rule)
            rewrite!(g)
        end
+
 ```
 """
 rewrite!(g::Graph) = rewrite!(g, g.rules)

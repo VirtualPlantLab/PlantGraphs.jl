@@ -69,10 +69,11 @@ Returns a tuple with all the graph-rewriting rules stored in a dynamic graph
 ```jldoctest
 julia> struct A <: Node end
 
+
 julia> struct B <: Node end
 
-julia> axiom = A() + B()
-PlantGraphs.StaticGraph(Dict{Int64, PlantGraphs.GraphNode}(90 => PlantGraphs.GraphNode{B}(B(), Set{Int64}(), 89, 90), 89 => PlantGraphs.GraphNode{A}(A(), Set([90]), missing, 89)), Dict{DataType, Set{Int64}}(A => Set([89]), B => Set([90])), 89, 90)
+
+julia> axiom = A() + B();
 
 julia> rule = Rule(A, rhs = x -> A() + B())
 Rule replacing nodes of type A without context capturing.
@@ -96,12 +97,13 @@ Returns the graph-level variables.
 ```jldoctest
 julia> struct A <: Node end
 
+
 julia> axiom = A()
 A()
 
 julia> g = Graph(axiom = axiom, data = 2)
 Dynamic graph with 1 nodes of types A and 0 rewriting rules.
-Dynamic graph variables stored in struct of type Int64+
+Dynamic graph variables stored in struct of type Int64
 
 julia> data(g)
 2

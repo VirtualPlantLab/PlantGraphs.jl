@@ -29,7 +29,7 @@ function GR.DiGraph(g::StaticGraph)
     rid = root_id(g)
     posroot = findfirst(i -> i == rid, ids)
     ids = vcat(rid, ids[1:(posroot - 1)], ids[(posroot + 1):end])
-    map_ids = Dict((ids[i], i) for i in 1:n)
+    map_ids = OrderedDict((ids[i], i) for i in 1:n)
     # Create label for each node (user can modify behavior)
     labels = [node_label(data(g[id]), id) for id in ids]
     # Update the digraph with information collected in the above
@@ -130,15 +130,16 @@ This function returns a Makie `Figure` object, while producing the visualization
 as a side effect.
 
 ## Examples
-```julia
-let
-    struct A1 <: Node val::Int end
-    struct B1 <: Node val::Int end
-    axiom = A1(1) + (B1(1) + A1(3), B1(4))
-    g = Graph(axiom = axiom)
-    import GLMakie # or CairoMakie, WGLMakie, etc.
-    draw(g)
-end
+```jldoctest
+julia> let
+           struct A1 <: Node val::Int end
+           struct B1 <: Node val::Int end
+           axiom = A1(1) + (B1(1) + A1(3), B1(4))
+           g = Graph(axiom = axiom)
+           import GLMakie # or CairoMakie, WGLMakie, etc.
+           draw(g)
+       end
+Figure()
 ```
 """
 function draw(g::Graph; resolution = (1920, 1080), nlabels_textsize = 15, arrow_size = 15,

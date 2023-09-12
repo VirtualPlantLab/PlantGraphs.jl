@@ -56,10 +56,10 @@ julia> let
            f.vals
        end
 4-element Vector{Int64}:
- 4
- 3
  2
  1
+ 3
+ 4
 ```
 """
 function traverse(g::Graph; fun = () -> nothing, order = "any", ID = root_id(g))

@@ -15,8 +15,7 @@ julia> let
          b1 = bar(1)
          b2 = bar(2)
          b1 + b2
-       end
-PlantGraphs.StaticGraph(Dict{Int64, PlantGraphs.GraphNode}(129 => PlantGraphs.GraphNode{bar}(bar(1), Set([130]), missing, 129), 130 => PlantGraphs.GraphNode{bar}(bar(2), Set{Int64}(), 129, 130)), Dict{DataType, Set{Int64}}(bar => Set([129, 130])), 129, 130)
+       end;
 ```
 """
 abstract type Node end
@@ -33,7 +32,7 @@ or modifying a graph.
 =#
 mutable struct GraphNode{T <: Node}
     data::T
-    children_id::Set{Int}
+    children_id::OrderedSet{Int}
     parent_id::Union{Int, Missing}
     self_id::Int
 end
@@ -49,8 +48,8 @@ Users do not build `StaticGraph` objects directly but rather they are created by
 VPL through the graph construction DSL (see User Manual for details).
 =#
 mutable struct StaticGraph
-    nodes::Dict{Int, GraphNode}
-    nodetypes::Dict{DataType, Set{Int}}
+    nodes::OrderedDict{Int, GraphNode}
+    nodetypes::OrderedDict{DataType, OrderedSet{Int}}
     root::Int
     insertion::Int
 end

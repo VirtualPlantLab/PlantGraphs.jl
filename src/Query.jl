@@ -33,10 +33,11 @@ dynamic graph.
 ```jldoctest
 julia> struct A <: Node end
 
+
 julia> struct B <: Node end
 
-julia> axiom = A() + B()
-PlantGraphs.StaticGraph(Dict{Int64, PlantGraphs.GraphNode}(115 => PlantGraphs.GraphNode{A}(A(), Set([116]), missing, 115), 116 => PlantGraphs.GraphNode{B}(B(), Set{Int64}(), 115, 116)), Dict{DataType, Set{Int64}}(A => Set([115]), B => Set([116])), 115, 116)
+
+julia> axiom = A() + B();
 
 julia> g = Graph(axiom = axiom)
 Dynamic graph with 2 nodes of types A,B and 0 rewriting rules.
@@ -80,10 +81,11 @@ the user.
 ```jldoctest
 julia> struct A <: Node end
 
+
 julia> struct B <: Node end
 
-julia> axiom = A() + B()
-PlantGraphs.StaticGraph(Dict{Int64, PlantGraphs.GraphNode}(120 => PlantGraphs.GraphNode{B}(B(), Set{Int64}(), 119, 120), 119 => PlantGraphs.GraphNode{A}(A(), Set([120]), missing, 119)), Dict{DataType, Set{Int64}}(A => Set([119]), B => Set([120])), 119, 120)
+
+julia> axiom = A() + B();
 
 julia> g = Graph(axiom = axiom)
 Dynamic graph with 2 nodes of types A,B and 0 rewriting rules.

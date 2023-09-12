@@ -63,6 +63,7 @@ julia> let
            import GLMakie # or CairoMakie, WGLMakie, etc.
            draw(axiom)
        end
+Figure()
 ```
 """
 +(n1::Node, n2::Node) = GraphNode(n1) + GraphNode(n2)
@@ -88,6 +89,7 @@ julia> let
            import GLMakie # or CairoMakie, WGLMakie, etc.
            draw(axiom)
        end
+Figure()
 ```
 """
 +(g::StaticGraph, n::Node) = g + GraphNode(n)
@@ -107,6 +109,7 @@ julia> let
            import GLMakie # or CairoMakie, WGLMakie, etc.
            draw(axiom)
        end
+Figure()
 ```
 """
 +(n::Node, g::StaticGraph) = GraphNode(n) + g
@@ -129,6 +132,7 @@ julia> let
            import GLMakie # or CairoMakie, WGLMakie, etc.
            draw(axiom)
        end
+Figure()
 ```
 """
 function +(g1::StaticGraph, g2::StaticGraph)
@@ -165,6 +169,7 @@ julia> let
            import GLMakie # or CairoMakie, WGLMakie, etc.
            draw(axiom)
        end
+Figure()
 ```
 """
 +(n::Node, T::Tuple) = GraphNode(n) + T

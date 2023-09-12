@@ -3,14 +3,16 @@ using Test
 using Documenter
 import Aqua
 
+# Test examples on documentation (jldoctest blocks)
+DocMeta.setdocmeta!(PlantGraphs, :DocTestSetup, :(using PlantGraphs); recursive=true)
+PlantGraphs.reset_id!() # Make sure that output is reproducible
+doctest(PlantGraphs)
+
 # Aqua
 @testset "Aqua" begin
     Aqua.test_all(PlantGraphs, ambiguities = false)
     Aqua.test_ambiguities([PlantGraphs])
 end
-
-# Test examples on documentation (jldoctest blocks)
-@testset "Documentation tests" begin doctest(PlantGraphs) end
 
 # Internal tests
 @testset "Graph node" begin include("internal/test_graphnode.jl") end

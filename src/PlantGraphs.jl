@@ -16,6 +16,9 @@ import Base: copy, length, empty!, append!, +, getindex, setindex!, show, Tuple,
 # To unroll the loop over rules or queries
 import Unrolled: @unroll
 
+# Use ordered collections for reproducibility
+import OrderedCollections: OrderedSet, OrderedDict
+
 # External libraries for drawing graphs
 import Graphs as GR
 import GraphMakie as GM
