@@ -1,7 +1,7 @@
 # PlantGraphs
 
 [![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](http://virtualplantlab.com/)
-[![CI](https://github.com/VirtualPlantLab/PlantGraphs.jl/actions/workflows/main.yml/badge.svg)](https://github.com/VirtualPlantLab/PlantGraphs.jl/actions/workflows/main.yml)
+[![CI](https://github.com/VirtualPlantLab/PlantGraphs.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/VirtualPlantLab/PlantGraphs.jl/actions/workflows/CI.yml)
 [![Coverage](https://codecov.io/gh/VirtualPlantLab/PlantGraphs.jl/branch/master/graph/badge.svg?token=LCZHPERHUN)](https://codecov.io/gh/VirtualPlantLab/PlantGraphs.jl)
 [![Aqua QA](https://raw.githubusercontent.com/JuliaTesting/Aqua.jl/master/badge.svg)](https://github.com/JuliaTesting/Aqua.jl)
 [![ColPrac](https://img.shields.io/badge/ColPrac-Contributor's%20Guide-blueviolet)](https://github.com/SciML/ColPrac)
@@ -31,8 +31,8 @@ Pkg.add(url="https://github.com/VirtualPlantLab/PlantGraphs.jl", rev = "master")
 Graphs from PlantGraphs.jl implement methods for most functions in the AbstractTrees.jl
 package (full compatibility is a work in progress), plus additional methods specific for
 functional-structural plant models. The following example shows how to create a simple
-graph and run a dynamic simulation (see documentation for more complicated examples
-including visualization):
+graph, run a dynamic simulation and visualize the graph (check documentation for more
+details and examples):
 
 ```julia
 using PlantGraphs
@@ -48,7 +48,7 @@ axiom = algae.A()
 rule1 = Rule(algae.A, rhs = x -> algae.A() + algae.B())
 rule2 = Rule(algae.B, rhs = x -> algae.A())
 organism = Graph(axiom = axiom, rules = (rule1, rule2))
-import GLMakie
+import CairoMakie
 draw(organism)
 
 rewrite!(organism)

@@ -60,7 +60,7 @@ julia> let
            struct A1 <: Node val::Int end
            struct B1 <: Node val::Int end
            axiom = A1(1) + B1(1)
-           import GLMakie # or CairoMakie, WGLMakie, etc.
+           import CairoMakie # or GLMakie, WGLMakie, etc.
            draw(axiom)
        end
 Figure()
@@ -80,13 +80,13 @@ end
 Creates a graph as the result of appending the node `n` to the insertion point of graph `g`.
 
 ## Examples
-```jldoctest
+```juliav
 julia> let
            struct A1 <: Node val::Int end
            struct B1 <: Node val::Int end
            axiom = A1(1) + B1(1)
            axiom = axiom + A1(2)
-           import GLMakie # or CairoMakie, WGLMakie, etc.
+           import CairoMakie # or GLMakie, WGLMakie, etc.
            draw(axiom)
        end
 Figure()
@@ -106,7 +106,7 @@ julia> let
            struct B1 <: Node val::Int end
            axiom = A1(1) + B1(1)
            axiom = A1(2) + axiom
-           import GLMakie # or CairoMakie, WGLMakie, etc.
+           import CairoMakie # or GLMakie, WGLMakie, etc.
            draw(axiom)
        end
 Figure()
@@ -129,7 +129,7 @@ julia> let
            axiom1 = A1(1) + B1(1)
            axiom2 = A1(2) + B1(2)
            axiom = axiom1 + axiom2
-           import GLMakie # or CairoMakie, WGLMakie, etc.
+           import CairoMakie # or GLMakie, WGLMakie, etc.
            draw(axiom)
        end
 Figure()
@@ -166,7 +166,7 @@ julia> let
            struct A1 <: Node val::Int end
            struct B1 <: Node val::Int end
            axiom = A1(1) + (B1(1) + A1(3), B1(4))
-           import GLMakie # or CairoMakie, WGLMakie, etc.
+           import CairoMakie # or GLMakie, WGLMakie, etc.
            draw(axiom)
        end
 Figure()

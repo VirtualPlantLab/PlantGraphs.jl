@@ -136,7 +136,7 @@ julia> let
            struct B1 <: Node val::Int end
            axiom = A1(1) + (B1(1) + A1(3), B1(4))
            g = Graph(axiom = axiom)
-           import GLMakie # or CairoMakie, WGLMakie, etc.
+           import CairoMakie # or GLMakie, WGLMakie, etc.
            draw(g)
        end
 Figure()
