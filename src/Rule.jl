@@ -42,7 +42,7 @@ julia> let
 ```
 """
 function Rule(nodetype::DataType; lhs = x -> true, rhs = x -> nothing,
-              captures::Bool = false)
+    captures::Bool = false)
     r = Rule{nodetype, captures, typeof(lhs), typeof(rhs)}(lhs, rhs, Int[], Tuple[])
     return r
 end

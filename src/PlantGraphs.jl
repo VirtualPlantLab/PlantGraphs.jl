@@ -2,10 +2,10 @@ module PlantGraphs
 
 # Public API of PlantGraph
 export Node, Graph, Rule, Query, rewrite!, apply, data, rules, graph,
-       static_graph, data, graph_data, parent,
-       has_parent, has_ancestor, ancestor, isroot, getroot, haschildren, hasdescendant,
-       children, getdescendant, isleaf, traverse, traversedfs, traversebfs, draw,
-       calculate_resolution, node_label
+    static_graph, data, graph_data, parent,
+    has_parent, has_ancestor, ancestor, isroot, getroot, haschildren, hasdescendant,
+    children, getdescendant, isleaf, traverse, traversedfs, traversebfs, draw,
+    calculate_resolution, node_label
 
 # API for VPL-style graphs
 import AbstractTrees: isroot, getroot, children, getdescendant

@@ -24,9 +24,9 @@ let
     end
 
     ruleDown = Rule(GT.CCell, lhs = transferDown,
-                    rhs = (context, anc) -> GT.CCell(data(anc).state), captures = true)
+        rhs = (context, anc) -> GT.CCell(data(anc).state), captures = true)
     ruleUp = Rule(GT.ACell, lhs = transferUp,
-                  rhs = (context, anc) -> GT.ACell(data(anc).state), captures = true)
+        rhs = (context, anc) -> GT.ACell(data(anc).state), captures = true)
 
     axiom = GT.ACell(1) + GT.BCell(2) + GT.CCell(3)
     pop = Graph(axiom = axiom, rules = (ruleDown, ruleUp))

@@ -8,13 +8,13 @@ let
     # Generate the structure
     axiom = GT.A() +
             (GT.A() + (GT.A() + GT.BCell(1), GT.A() + GT.BCell(2), GT.A() + GT.BCell(3)),
-             GT.A() + GT.A() + GT.A() + GT.BCell(4)) +
+                GT.A() + GT.A() + GT.A() + GT.BCell(4)) +
             GT.A() +
             (GT.A() + (GT.A() + GT.BCell(5), GT.A() + GT.BCell(6), GT.A() + GT.BCell(7)),
-             GT.A() + GT.A() + GT.BCell(8)) +
+                GT.A() + GT.A() + GT.BCell(8)) +
             GT.A() +
             (GT.A() + (GT.A() + GT.BCell(9), GT.A() + GT.BCell(10), GT.A() + GT.BCell(11)),
-             GT.A() + GT.BCell(12)) +
+                GT.A() + GT.BCell(12)) +
             GT.A() + GT.A() + GT.BCell(13)
     graph = Graph(axiom = axiom)
 

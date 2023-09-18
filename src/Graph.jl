@@ -46,8 +46,8 @@ Dynamic graph with 2 nodes of types A0,B0 and 1 rewriting rules.
 ```
 """
 function Graph(; axiom::Union{StaticGraph, Node},
-               rules::Union{Nothing, Tuple, Rule} = nothing,
-               data = nothing)
+    rules::Union{Nothing, Tuple, Rule} = nothing,
+    data = nothing)
     if rules isa Nothing
         out = Graph(StaticGraph(deepcopy(axiom)), (), deepcopy(data))
     else
@@ -132,7 +132,7 @@ function show(io::IO, g::Graph)
     nodetypes = collect(keys(g.graph.nodetypes))
     data = typeof(g.data)
     println(io, "Dynamic graph with ", nnodes, " nodes of types ", join(nodetypes, ','),
-            " and ", nrules, " rewriting rules.")
+        " and ", nrules, " rewriting rules.")
     if data != Nothing
         println(io, "Dynamic graph variables stored in struct of type ", data)
     end

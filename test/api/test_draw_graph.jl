@@ -20,10 +20,10 @@ let
 
     # Test resolution calculate_resolution
     default_res = calculate_resolution(width = 1024 / 300 * 2.54, height = 768 / 300 * 2.54,
-                                       format = "raster", dpi = 300)
+        format = "raster", dpi = 300)
     @test default_res == (1024, 768)
     another_res = calculate_resolution(width = 800 / 300 * 2.54, height = 600 / 300 * 2.54,
-                                       format = "raster", dpi = 600)
+        format = "raster", dpi = 600)
     @test another_res == (1600, 1200)
     another_res = calculate_resolution(format = "vector")
     @test all(another_res .≈ (327.68, 245.76))

@@ -15,7 +15,7 @@ let
     end
 
     rule = Rule(GT.Cell{Int}, lhs = transfer,
-                rhs = (context, father) -> GT.Cell(data(father).state), captures = true)
+        rhs = (context, father) -> GT.Cell(data(father).state), captures = true)
     @test PlantGraphs.captures(rule)
 
     axiom = GT.Cell(1) + GT.Cell(0) + GT.Cell(0)
@@ -39,7 +39,7 @@ let
     end
 
     ruleUp = Rule(GT.Cell{Int}, lhs = transferUp,
-                  rhs = (context, child) -> GT.Cell(data(child).state), captures = true)
+        rhs = (context, child) -> GT.Cell(data(child).state), captures = true)
 
     axiomUp = GT.Cell(0) + GT.Cell(0) + GT.Cell(1)
     pop = Graph(axiom = axiomUp, rules = ruleUp)

@@ -20,14 +20,19 @@ end
 #=
     Facilitate construction of static graphs without having to use the DSL
 =#
-StaticGraph() = StaticGraph(OrderedDict{Int, GraphNode}(), OrderedDict{DataType, OrderedSet{Int}}(), -1, -1)
+function StaticGraph()
+    StaticGraph(OrderedDict{Int, GraphNode}(),
+        OrderedDict{DataType, OrderedSet{Int}}(),
+        -1,
+        -1)
+end
 function StaticGraph(n::GraphNode)
     ID = generate_id()
     change_id!(n, ID)
     nlocal = copy(n)
     g = StaticGraph(OrderedDict{Int, GraphNode}(ID => nlocal),
-                    OrderedDict(typeof(nlocal.data) => OrderedSet{Int}(ID)),
-                    ID, ID)
+        OrderedDict(typeof(nlocal.data) => OrderedSet{Int}(ID)),
+        ID, ID)
     return g
 end
 StaticGraph(n::Node) = StaticGraph(GraphNode(n))

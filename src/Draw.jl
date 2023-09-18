@@ -56,7 +56,7 @@ Equivalent to the method `draw(g::Graph; kwargs...)` but  to visualize static
 graphs (e.g., the axiom of a graph).
 """
 function draw(g::StaticGraph; resolution = (1920, 1080),
-              nlabels_textsize = 15, arrow_size = 15, node_size = 5)
+    nlabels_textsize = 15, arrow_size = 15, node_size = 5)
 
     # Create the digraph
     dg, labels, n = GR.DiGraph(g)
@@ -69,14 +69,14 @@ function draw(g::StaticGraph; resolution = (1920, 1080),
     # Generate the visualization
     nlabels_align = [(:left, :bottom) for _ in 1:n]
     f, ax, p = GM.graphplot(dg,
-                            layout = NL.Buchheim(),
-                            nlabels = labels,
-                            nlabels_distance = 5,
-                            nlabels_textsize = nlabels_textsize,
-                            nlabels_align = nlabels_align,
-                            arrow_size = arrow_size,
-                            node_size = node_size,
-                            figure = (resolution = resolution,))
+        layout = NL.Buchheim(),
+        nlabels = labels,
+        nlabels_distance = 5,
+        nlabels_textsize = nlabels_textsize,
+        nlabels_align = nlabels_align,
+        arrow_size = arrow_size,
+        node_size = node_size,
+        figure = (resolution = resolution,))
 
     # Make it look prettier
     GM.hidedecorations!(ax)
@@ -143,9 +143,9 @@ Figure()
 ```
 """
 function draw(g::Graph; resolution = (1920, 1080), nlabels_textsize = 15, arrow_size = 15,
-              node_size = 5)
+    node_size = 5)
     out = draw(g.graph; resolution = resolution, nlabels_textsize = nlabels_textsize,
-               arrow_size = arrow_size, node_size = node_size)
+        arrow_size = arrow_size, node_size = node_size)
     return out
 end
 
@@ -157,7 +157,7 @@ Calculate the resolution required to achieve a specific `width` and `height`
 (in cm) of the exported image, with a particular `dpi` (for raster formats).
 """
 function calculate_resolution(; width = 1024 / 300 * 2.54, height = 768 / 300 * 2.54,
-                              format = "raster", dpi = 300)
+    format = "raster", dpi = 300)
     if format == "raster"
         res_width = width / 2.54 * dpi
         res_height = height / 2.54 * dpi

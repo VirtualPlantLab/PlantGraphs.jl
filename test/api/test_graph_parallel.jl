@@ -36,8 +36,10 @@ let
 
     # Test that we get the same results for all graphs
     @test length(algae_serial[1]) == length(algae_parallel[2])
-    Bnodes_serial = sum(n isa GT.B for n in data.(values(PlantGraphs.nodes(algae_serial[4]))))
-    Anodes_serial = sum(n isa GT.A for n in data.(values(PlantGraphs.nodes(algae_serial[4]))))
+    Bnodes_serial = sum(n isa GT.B
+                        for n in data.(values(PlantGraphs.nodes(algae_serial[4]))))
+    Anodes_serial = sum(n isa GT.A
+                        for n in data.(values(PlantGraphs.nodes(algae_serial[4]))))
     Bnodes_parallel = sum(n isa GT.B
                           for n in data.(values(PlantGraphs.nodes(algae_parallel[3]))))
     Anodes_parallel = sum(n isa GT.A
@@ -47,5 +49,5 @@ let
 
     # These results should be different (tests lack of sharing of states)
     @test isempty(intersect(keys(PlantGraphs.nodes(algae_parallel[3])),
-                            keys(PlantGraphs.nodes(algae_parallel[4]))))
+        keys(PlantGraphs.nodes(algae_parallel[4]))))
 end

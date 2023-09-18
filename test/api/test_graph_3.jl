@@ -87,7 +87,7 @@ let
 
     # Create organism
     organism = Graph(axiom = axiom, rules = (ruleGrowth, ruleDeath),
-                     data = GT.G3pars(1 // 3, 10 // 9))
+        data = GT.G3pars(1 // 3, 10 // 9))
 
     # Grow six steps
     for i in 1:5
