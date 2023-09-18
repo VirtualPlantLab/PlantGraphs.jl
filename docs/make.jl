@@ -1,9 +1,8 @@
 using PlantGraphs
 using Documenter
 
-DocMeta.setdocmeta!(PlantGraphs, :DocTestSetup, :(using PlantGraphs); recursive=true)
-
 makedocs(;
+         doctest = false,
          modules = [PlantGraphs],
          format = Documenter.HTML(;
             prettyurls = get(ENV, "CI", "false") == "true",

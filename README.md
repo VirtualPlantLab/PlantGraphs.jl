@@ -1,6 +1,6 @@
 # PlantGraphs
 
-[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](http://virtualplantlab.com/)
+[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://VirtualPlantLab.github.io/PlantGraphs.jl/stable/)
 [![CI](https://github.com/VirtualPlantLab/PlantGraphs.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/VirtualPlantLab/PlantGraphs.jl/actions/workflows/CI.yml)
 [![Coverage](https://codecov.io/gh/VirtualPlantLab/PlantGraphs.jl/branch/master/graph/badge.svg?token=LCZHPERHUN)](https://codecov.io/gh/VirtualPlantLab/PlantGraphs.jl)
 [![Aqua QA](https://raw.githubusercontent.com/JuliaTesting/Aqua.jl/master/badge.svg)](https://github.com/JuliaTesting/Aqua.jl)
@@ -8,8 +8,7 @@
 [![SciML Code Style](https://img.shields.io/static/v1?label=code%20style&message=SciML&color=9558b2&labelColor=389826)](https://github.com/SciML/SciMLStyle)
 
 The goal of PlantGraphs.jl is to provide a framework for building dynamic graphs for
-functional-structural plant models. This package is a component of the Virtual Plant Lab and
-end users should focus on the [VPL.jl](https://github.com/VirtualPlantLab/VPL.jl) instead.
+functional-structural plant models. This package is a component of the [Virtual Plant Lab](http://virtualplantlab.com/).
 
 # 1. Instalation
 
