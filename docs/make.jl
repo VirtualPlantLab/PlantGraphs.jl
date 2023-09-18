@@ -18,6 +18,6 @@ makedocs(;
          ])
 
 deploydocs(;
-         repo="github.com/VirtualPlantLab/PlantGraphs.jl",
+         repo="github.com/VirtualPlantLab/PlantGraphs.jl.git",
          devbranch="master"
 )
