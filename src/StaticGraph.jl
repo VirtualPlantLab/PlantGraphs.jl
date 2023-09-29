@@ -1,4 +1,4 @@
-### This file does not contain public API ###
+### This file contains public API ###
 
 #=
  Generate unique IDs for Nodes in graphs to avoid ID clashes when merging graphs
@@ -63,6 +63,16 @@ Root
 root_id(g::StaticGraph) = g.root
 update_root!(g::StaticGraph, ID) = g.root = ID
 getroot(g::StaticGraph) = g[root_id(g)]
+
+"""
+    get_root(g::Graph)
+
+
+Extract the root node of a graph.
+
+`getroot` is an alias for `get_root` for compatibility with AbstractTrees.jl
+"""
+const get_root = getroot
 
 #=
 Insertion

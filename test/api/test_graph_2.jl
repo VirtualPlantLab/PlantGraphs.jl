@@ -30,7 +30,7 @@ let
 
     # Cell transfer bottom to top
     function transferUp(context)
-        if haschildren(context)
+        if has_children(context)
             child = first(children(context))
             return (true, (child,))
         else

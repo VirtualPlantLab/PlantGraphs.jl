@@ -29,17 +29,17 @@ let
     @test length(g3) == 3
     @test length(g3.nodetypes) == 3
     @test sum(i.data.val for i in V.nodes(g3) |> values |> collect) == 6
-    @test isroot(V.getroot(g3))
-    @test !isleaf(V.getroot(g3))
-    @test isleaf(V.insertion(g3))
-    @test !isroot(V.insertion(g3))
-    @test sum(isleaf(node) for node in V.nodes(g3) |> values) == 1
-    @test sum(isroot(node) for node in V.nodes(g3) |> values) == 1
+    @test is_root(V.get_root(g3))
+    @test !is_leaf(V.get_root(g3))
+    @test is_leaf(V.insertion(g3))
+    @test !is_root(V.insertion(g3))
+    @test sum(is_leaf(node) for node in V.nodes(g3) |> values) == 1
+    @test sum(is_root(node) for node in V.nodes(g3) |> values) == 1
 
     # DSL with GraphNodes with branches
     n = [V.GraphNode(GT.AV(i)) for i in 1:6]
     g4 = n[1] + n[2] + (n[3], n[4] + n[5]) + n[6]
     @test length(g4) == 6
-    @test sum(isleaf(node) for node in V.nodes(g4) |> values) == 3
-    @test sum(isroot(node) for node in V.nodes(g4) |> values) == 1
+    @test sum(is_leaf(node) for node in V.nodes(g4) |> values) == 3
+    @test sum(is_root(node) for node in V.nodes(g4) |> values) == 1
 end

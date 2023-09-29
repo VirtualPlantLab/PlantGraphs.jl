@@ -57,17 +57,17 @@ end
  Check if GraphNode has a child or a descendant that fits a condition with optional
  recursive search (with maximum depth)
 =#
-haschildren(n::GraphNode) = !isempty(n.children_id)
-isleaf(n::GraphNode) = !haschildren(n)
+has_children(n::GraphNode) = !isempty(n.children_id)
+is_leaf(n::GraphNode) = !has_children(n)
 
-function hasdescendant(node::GraphNode, g::Graph, condition, maxlevel::Int,
+function has_descendant(node::GraphNode, g::Graph, condition, maxlevel::Int,
     level::Int = 1)
     for child in children(node, g)
         if condition(Context(g, child))
             return true, level
         else
             if level <= maxlevel
-                if hasdescendant(child, g, condition, maxlevel, level + 1)[1]
+                if has_descendant(child, g, condition, maxlevel, level + 1)[1]
                     return true, level + 1
                 end
             end

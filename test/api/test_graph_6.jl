@@ -31,7 +31,7 @@ let
     =#
     function Q2_fun(n)
         # Condition 1
-        check, steps = has_ancestor(n, condition = isroot)
+        check, steps = has_ancestor(n, condition = is_root)
         steps != 5 && return false
         # Condition 2
         p2 = parent(n, nsteps = 2)
@@ -50,7 +50,7 @@ let
     =#
     function Q3_fun(n)
         # Condition 1
-        check, steps = has_ancestor(n, condition = isroot)
+        check, steps = has_ancestor(n, condition = is_root)
         steps != 3 && return false
         # Condition 2
         p2 = parent(n, nsteps = 2)
@@ -70,7 +70,7 @@ let
     =#
     function Q4_fun(n)
         # Condition 1
-        check, steps = has_ancestor(n, condition = isroot)
+        check, steps = has_ancestor(n, condition = is_root)
         steps != 4 && return false
         # Condition 2
         p2 = parent(n, nsteps = 2)

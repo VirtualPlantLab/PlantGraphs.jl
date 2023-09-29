@@ -151,7 +151,7 @@ end
 @forwardgraph length
 @forwardgraph nodetypes
 @forwardgraph root_id
-@forwardgraph getroot
+@forwardgraph get_root
 @forwardgraph insertion_id
 @forwardgraph insertion
 @forwardgraph nodes

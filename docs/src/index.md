@@ -71,7 +71,7 @@ has_parent(c::Context)
 ```
 
 ```@docs
-isroot(c::Context)
+is_root
 ```
 
 ```@docs
@@ -87,15 +87,19 @@ ancestor(c::Context; condition = x -> true, maxlevel::Int = typemax(Int))
 ```
 
 ```@docs
-haschildren(c::Context)
+get_root
 ```
 
 ```@docs
-isleaf(c::Context)
+has_children(c::Context)
 ```
 
 ```@docs
-hasdescendant(c::Context; condition = x -> true, maxlevel::Int = typemax(Int))
+is_leaf(c::Context)
+```
+
+```@docs
+has_descendant(c::Context; condition = x -> true, maxlevel::Int = typemax(Int))
 ```
 
 ```@docs
@@ -103,7 +107,7 @@ children(c::Context)
 ```
 
 ```@docs
-getdescendant(c::Context; condition = x -> true, maxlevel::Int = typemax(Int))
+get_descendant
 ```
 
 # Traversal algorithms
@@ -113,11 +117,11 @@ traverse(g::Graph; fun = () -> nothing)
 ```
 
 ```@docs
-traversedfs(g::Graph; fun = () -> nothing, ID = root_id(g))
+traverse_dfs(g::Graph; fun = () -> nothing, ID = root_id(g))
 ```
 
 ```@docs
-traversebfs(g::Graph; fun = () -> nothing, ID = root_id(g))
+traverse_bfs(g::Graph; fun = () -> nothing, ID = root_id(g))
 ```
 
 ## Graph visualization
