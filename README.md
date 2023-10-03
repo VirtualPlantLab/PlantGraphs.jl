@@ -11,9 +11,9 @@
 The goal of PlantGraphs.jl is to provide a framework for building dynamic graphs for
 functional-structural plant models. This package is a component of the
 [Virtual Plant Lab](http://virtualplantlab.com/). Users should install instead the
-interface package [VPL.jl](https://github.com/VirtualPlantLab/VPL.jl).
+interface package [VirtualPlantLab.jl](https://github.com/VirtualPlantLab/VirtualPlantLab.jl).
 
-# 1. Instalation
+# 1. Installation
 
 You can install the latest stable version of PlantGraphs.jl with the Julia package manager:
 
@@ -31,10 +31,9 @@ Pkg.add(url="https://github.com/VirtualPlantLab/PlantGraphs.jl", rev = "master")
 # 2. Usage
 
 Graphs from PlantGraphs.jl implement methods for most functions in the AbstractTrees.jl
-package (full compatibility is a work in progress), plus additional methods specific for
-functional-structural plant models. The following example shows how to create a simple
-graph, run a dynamic simulation and visualize the graph (check documentation for more
-details and examples):
+package, plus additional methods specific for functional-structural plant models. The
+following example shows how to create a simple graph, run a dynamic simulation and visualize
+the graph (check documentation for more details and examples):
 
 ```julia
 using PlantGraphs
