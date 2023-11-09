@@ -56,14 +56,11 @@ Creates a graph with two nodes where `n1` is the root and `n2` is the insertion 
 
 ## Examples
 ```jldoctest
-julia> let
-           struct A1 <: Node val::Int end
-           struct B1 <: Node val::Int end
-           axiom = A1(1) + B1(1)
-           import CairoMakie # or GLMakie, WGLMakie, etc.
-           draw(axiom)
-       end
-Figure()
+julia> struct A1 <: Node val::Int end
+       struct B1 <: Node val::Int end
+       axiom = A1(1) + B1(1)
+       import CairoMakie # or GLMakie, WGLMakie, etc.
+       draw(axiom);
 ```
 """
 +(n1::Node, n2::Node) = GraphNode(n1) + GraphNode(n2)
@@ -80,16 +77,13 @@ end
 Creates a graph as the result of appending the node `n` to the insertion point of graph `g`.
 
 ## Examples
-```juliav
-julia> let
-           struct A1 <: Node val::Int end
-           struct B1 <: Node val::Int end
-           axiom = A1(1) + B1(1)
-           axiom = axiom + A1(2)
-           import CairoMakie # or GLMakie, WGLMakie, etc.
-           draw(axiom)
-       end
-Figure()
+```jldoctest
+julia> struct A1 <: Node val::Int end
+       struct B1 <: Node val::Int end
+       axiom = A1(1) + B1(1)
+       axiom = axiom + A1(2)
+       import CairoMakie # or GLMakie, WGLMakie, etc.
+       draw(axiom);
 ```
 """
 +(g::StaticGraph, n::Node) = g + GraphNode(n)
@@ -101,15 +95,12 @@ Creates a graph as the result of appending the static graph `g` to the node `n`.
 
 ## Examples
 ```jldoctest
-julia> let
-           struct A1 <: Node val::Int end
-           struct B1 <: Node val::Int end
-           axiom = A1(1) + B1(1)
-           axiom = A1(2) + axiom
-           import CairoMakie # or GLMakie, WGLMakie, etc.
-           draw(axiom)
-       end
-Figure()
+julia>  struct A1 <: Node val::Int end
+        struct B1 <: Node val::Int end
+        axiom = A1(1) + B1(1)
+        axiom = A1(2) + axiom
+        import CairoMakie # or GLMakie, WGLMakie, etc.
+        draw(axiom);
 ```
 """
 +(n::Node, g::StaticGraph) = GraphNode(n) + g
@@ -123,16 +114,13 @@ The insertion point of the final graph corresponds to the insertion point of `g2
 
 ## Examples
 ```jldoctest
-julia> let
-           struct A1 <: Node val::Int end
-           struct B1 <: Node val::Int end
-           axiom1 = A1(1) + B1(1)
-           axiom2 = A1(2) + B1(2)
-           axiom = axiom1 + axiom2
-           import CairoMakie # or GLMakie, WGLMakie, etc.
-           draw(axiom)
-       end
-Figure()
+julia> struct A1 <: Node val::Int end
+       struct B1 <: Node val::Int end
+       axiom1 = A1(1) + B1(1)
+       axiom2 = A1(2) + B1(2)
+       axiom = axiom1 + axiom2
+       import CairoMakie # or GLMakie, WGLMakie, etc.
+       draw(axiom);
 ```
 """
 function +(g1::StaticGraph, g2::StaticGraph)
@@ -162,14 +150,11 @@ branch.
 
 ## Examples
 ```jldoctest
-julia> let
-           struct A1 <: Node val::Int end
-           struct B1 <: Node val::Int end
-           axiom = A1(1) + (B1(1) + A1(3), B1(4))
-           import CairoMakie # or GLMakie, WGLMakie, etc.
-           draw(axiom)
-       end
-Figure()
+julia> struct A1 <: Node val::Int end
+       struct B1 <: Node val::Int end
+       axiom = A1(1) + (B1(1) + A1(3), B1(4))
+       import CairoMakie # or GLMakie, WGLMakie, etc.
+       draw(axiom);
 ```
 """
 +(n::Node, T::Tuple) = GraphNode(n) + T

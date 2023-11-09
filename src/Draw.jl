@@ -131,15 +131,12 @@ as a side effect.
 
 ## Examples
 ```jldoctest
-julia> let
-           struct A1 <: Node val::Int end
-           struct B1 <: Node val::Int end
-           axiom = A1(1) + (B1(1) + A1(3), B1(4))
-           g = Graph(axiom = axiom)
-           import CairoMakie # or GLMakie, WGLMakie, etc.
-           draw(g)
-       end
-Figure()
+julia> struct A1 <: Node val::Int end
+       struct B1 <: Node val::Int end
+       axiom = A1(1) + (B1(1) + A1(3), B1(4))
+       g = Graph(axiom = axiom)
+       import CairoMakie # or GLMakie, WGLMakie, etc.
+       draw(g);
 ```
 """
 function draw(g::Graph; resolution = (1920, 1080), nlabels_textsize = 15, arrow_size = 15,
