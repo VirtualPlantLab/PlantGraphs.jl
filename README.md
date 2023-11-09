@@ -1,7 +1,7 @@
 # PlantGraphs
 
-[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://VirtualPlantLab.github.io/PlantGraphs.jl/stable/)
-[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://VirtualPlantLab.github.io/PlantGraphs.jl/dev/)
+[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://virtualplantlab.com/stable/api/graphs/)
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://virtualplantlab.com/dev/api/graphs/)
 [![CI](https://github.com/VirtualPlantLab/PlantGraphs.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/VirtualPlantLab/PlantGraphs.jl/actions/workflows/CI.yml)
 [![Coverage](https://codecov.io/gh/VirtualPlantLab/PlantGraphs.jl/branch/master/graph/badge.svg?token=LCZHPERHUN)](https://codecov.io/gh/VirtualPlantLab/PlantGraphs.jl)
 [![Aqua QA](https://raw.githubusercontent.com/JuliaTesting/Aqua.jl/master/badge.svg)](https://github.com/JuliaTesting/Aqua.jl)
