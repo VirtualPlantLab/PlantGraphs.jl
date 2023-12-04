@@ -7,6 +7,7 @@
 [![Aqua QA](https://raw.githubusercontent.com/JuliaTesting/Aqua.jl/master/badge.svg)](https://github.com/JuliaTesting/Aqua.jl)
 [![ColPrac](https://img.shields.io/badge/ColPrac-Contributor's%20Guide-blueviolet)](https://github.com/SciML/ColPrac)
 [![SciML Code Style](https://img.shields.io/static/v1?label=code%20style&message=SciML&color=9558b2&labelColor=389826)](https://github.com/SciML/SciMLStyle)
+[![DOI](https://zenodo.org/badge/685009820.svg)](https://zenodo.org/doi/10.5281/zenodo.10256521)
 
 The goal of PlantGraphs.jl is to provide a framework for building dynamic graphs for
 functional-structural plant models. This package is a component of the
