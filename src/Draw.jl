@@ -76,7 +76,7 @@ function draw(g::StaticGraph; resolution = (1920, 1080),
         nlabels_align = nlabels_align,
         arrow_size = arrow_size,
         node_size = node_size,
-        figure = (resolution = resolution,))
+        figure = (size = resolution,))
 
     # Make it look prettier
     GM.hidedecorations!(ax)

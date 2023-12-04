@@ -13,7 +13,7 @@ Unrolled = "9602ed7d-8fef-5bc8-8597-8f21381861e8"
 
 [compat]
 AbstractTrees = "0.4.4"
-GraphMakie = "0.5.3"
+GraphMakie = "0.5.8"
 Graphs = "1.8.0"
 NetworkLayout = "0.4.5"
 OrderedCollections = "1.6.2"
