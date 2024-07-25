@@ -4,6 +4,16 @@ include("types.jl")
 import .GT
 
 let
+
+    ### ID counter
+    V.reset_id!()
+    @test V.get_id!().value == 0
+    V.generate_id()
+    @test V.get_id!().value == 1
+    V.set_id!(10)
+    @test V.get_id!().value == 10
+
+
     ### Constructors and DSL
 
     # Empty StaticGraph constructor

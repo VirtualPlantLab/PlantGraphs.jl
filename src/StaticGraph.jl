@@ -9,8 +9,43 @@
 let ID = Threads.Atomic{Int}(0)
     global generate_id
     global reset_id!
+    global get_id!
+    global set_id!
+
+    @doc """
+        generate_id()
+
+    Generate a new unique ID for a node in a graph and update the ID counter.
+    """
     generate_id() = Threads.atomic_add!(ID, 1) + 1
-    reset_id!() = ID = Threads.Atomic{Int}(0)
+
+    @doc """
+        reset_id!()
+
+    Reset the ID counter for generating unique IDs for nodes in graphs to zero.
+    """
+    function reset_id!()
+        set_id!(0)
+    end
+
+    @doc """
+        get_id!()
+
+    Get the current value of the ID counter for generating unique IDs for nodes in graphs.
+    """
+    get_id!() = ID
+
+    @doc """
+        set_id!(id)
+
+    Set the ID counter for generating unique IDs for nodes in graphs to any integer value
+    `id`.
+    """
+    function set_id!(id)
+        ID = Threads.Atomic{Int}(id)
+    end
+
+
 end
 
 ################################################################################
