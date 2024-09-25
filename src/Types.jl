@@ -8,14 +8,15 @@ the graph construction DSL.
 
 # Example
 ```jldoctest
-julia> let
-         struct bar <: Node
+julia> struct bar <: Node
            x::Int
-         end
-         b1 = bar(1)
-         b2 = bar(2)
-         b1 + b2
        end;
+
+julia> b1 = bar(1);
+
+julia> b2 = bar(2);
+
+julia> b1 + b2;
 ```
 """
 abstract type Node end
@@ -32,7 +33,7 @@ or modifying a graph.
 =#
 mutable struct GraphNode{T <: Node}
     data::T
-    children_id::OrderedSet{Int}
+    children_id::OC.OrderedSet{Int}
     parent_id::Union{Int, Missing}
     self_id::Int
 end
@@ -48,8 +49,8 @@ Users do not build `StaticGraph` objects directly but rather they are created by
 VPL through the graph construction DSL (see User Manual for details).
 =#
 mutable struct StaticGraph
-    nodes::OrderedDict{Int, GraphNode}
-    nodetypes::OrderedDict{DataType, OrderedSet{Int}}
+    nodes::OC.OrderedDict{Int, GraphNode}
+    nodetypes::OC.OrderedDict{DataType, OC.OrderedSet{Int}}
     root::Int
     insertion::Int
 end

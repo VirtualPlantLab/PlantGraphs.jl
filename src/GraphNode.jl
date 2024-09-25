@@ -4,7 +4,7 @@
 ############################### Constructors ###################################
 ################################################################################
 
-GraphNode(data::Node) = GraphNode(data, OrderedSet{Int}(), missing, -1)
+GraphNode(data::Node) = GraphNode(data, OC.OrderedSet{Int}(), missing, -1)
 
 ################################################################################
 ################################## Getters #####################################
@@ -84,7 +84,7 @@ end
  Retrieve the parent GraphNode or an ancestor that fits a query with optional
  recursive search (with maximum depth)
 =#
-function parent(n::GraphNode, g::Graph, nsteps::Int = 1)
+function Base.parent(n::GraphNode, g::Graph, nsteps::Int = 1)
     isroot(n) && (return missing)
     if (nsteps == 1)
         out = g[parent_id(n)]
@@ -95,7 +95,7 @@ function parent(n::GraphNode, g::Graph, nsteps::Int = 1)
 end
 
 # This method is useful for pruning and other static graph operations
-parent(n::GraphNode, g::StaticGraph) = g[parent_id(n)]
+Base.parent(n::GraphNode, g::StaticGraph) = g[parent_id(n)]
 
 function ancestor(node::GraphNode, g::Graph, condition, maxlevel::Int,
     level::Int = 1)
@@ -137,4 +137,4 @@ Creates a new GraphNode with the same contents as `n`. A reference to the data i
 but children_id and parent_id are copied. This necessary for rules that reuse a node
 on the right hand side
 =#
-copy(n::GraphNode) = GraphNode(n.data, copy(children_id(n)), parent_id(n), self_id(n))
+Base.copy(n::GraphNode) = GraphNode(n.data, copy(children_id(n)), parent_id(n), self_id(n))

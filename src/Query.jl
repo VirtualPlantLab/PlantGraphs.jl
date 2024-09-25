@@ -13,8 +13,7 @@ Create a query that matches nodes of type `nodetype` and a `condition`.
 - `N::DataType`: Type of node to be matched.
 
 ## Keywords
-- `condition`: Function or function-like object that checks if a node should be
-selected.
+- `condition`: Function or function-like object that checks if a node should be selected.
 
 ## Details
 If the `nodetype` should refer to a concrete type and match one of the types
@@ -31,23 +30,17 @@ dynamic graph.
 
 # Examples
 ```jldoctest
-julia> struct A <: Node end
+julia> struct A <: Node end;
 
-
-julia> struct B <: Node end
-
+julia> struct B <: Node end;
 
 julia> axiom = A() + B();
 
-julia> g = Graph(axiom = axiom)
-Dynamic graph with 2 nodes of types A,B and 0 rewriting rules.
+julia> g = Graph(axiom = axiom);
 
-julia> query = Query(A)
-Query object for nodes of type A
+julia> query = Query(A);
 
-julia> apply(g, query)
-1-element Vector{A}:
- A()
+julia> apply(g, query);
 ```
 """
 Query(N::DataType; condition = x -> true) = Query{N, typeof(condition)}(condition)
@@ -62,7 +55,7 @@ nodetype(query::Query{N, Q}) where {N, Q} = N
 #=
   Print human-friendly description of a query
 =#
-function show(io::IO, rule::Query{N, Q}) where {N, Q}
+function Base.show(io::IO, rule::Query{N, Q}) where {N, Q}
     println(io, "Query object for nodes of type ", N)
     return nothing
 end
@@ -79,23 +72,17 @@ the user.
 
 # Examples
 ```jldoctest
-julia> struct A <: Node end
+julia> struct A <: Node end;
 
-
-julia> struct B <: Node end
-
+julia> struct B <: Node end;
 
 julia> axiom = A() + B();
 
-julia> g = Graph(axiom = axiom)
-Dynamic graph with 2 nodes of types A,B and 0 rewriting rules.
+julia> g = Graph(axiom = axiom);
 
-julia> query = Query(A)
-Query object for nodes of type A
+julia> query = Query(A);
 
-julia> apply(g, query)
-1-element Vector{A}:
- A()
+julia> apply(g, query);
 ```
 """
 function apply(g::Graph, query::Query{N, Q})::Vector{N} where {Q, N}

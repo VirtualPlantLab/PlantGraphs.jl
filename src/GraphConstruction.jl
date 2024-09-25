@@ -16,7 +16,7 @@ end
 #=
 Append a node to the node ID in a graph
 =#
-function append!(g::StaticGraph, ID, n::GraphNode)
+function Base.append!(g::StaticGraph, ID, n::GraphNode)
     nID = add!(g, n)
     add_child!(g[ID], nID)
     set_parent!(g[nID], ID)
@@ -27,7 +27,7 @@ end
 Append a graph to the node ID in a graph. The insertion point of the final graph
 is the insertion point of the appended graph
 =#
-function append!(g::StaticGraph, ID, gn::StaticGraph)
+function Base.append!(g::StaticGraph, ID, gn::StaticGraph)
     # Transfer nodes to the receiving graph
     for (key, val) in nodes(gn)
         g[key] = val
@@ -42,7 +42,7 @@ end
 #######################  StaticGraph construction DSL  ###############################
 ################################################################################
 
-function +(n1::GraphNode, n2::GraphNode)
+function Base.:+(n1::GraphNode, n2::GraphNode)
     g = StaticGraph(n1)
     nID = append!(g, insertion_id(g), n2)
     update_insertion!(g, nID)
@@ -56,16 +56,20 @@ Creates a graph with two nodes where `n1` is the root and `n2` is the insertion 
 
 ## Examples
 ```jldoctest
-julia> struct A1 <: Node val::Int end
-       struct B1 <: Node val::Int end
-       axiom = A1(1) + B1(1)
-       import CairoMakie # or GLMakie, WGLMakie, etc.
-       draw(axiom);
+julia> struct A1 <: Node val::Int end;
+
+julia> struct B1 <: Node val::Int end;
+
+julia> axiom = A1(1) + B1(1);
+
+julia> import CairoMakie; # or GLMakie, WGLMakie, etc.
+
+julia> draw(axiom);
 ```
 """
-+(n1::Node, n2::Node) = GraphNode(n1) + GraphNode(n2)
+Base.:+(n1::Node, n2::Node) = GraphNode(n1) + GraphNode(n2)
 
-function +(g::StaticGraph, n::GraphNode)
+function Base.:+(g::StaticGraph, n::GraphNode)
     nID = append!(g, insertion_id(g), n)
     update_insertion!(g, nID)
     return g
@@ -78,15 +82,20 @@ Creates a graph as the result of appending the node `n` to the insertion point o
 
 ## Examples
 ```jldoctest
-julia> struct A1 <: Node val::Int end
-       struct B1 <: Node val::Int end
-       axiom = A1(1) + B1(1)
-       axiom = axiom + A1(2)
-       import CairoMakie # or GLMakie, WGLMakie, etc.
-       draw(axiom);
+julia> struct A1 <: Node val::Int end;
+
+julia> struct B1 <: Node val::Int end;
+
+julia> axiom = A1(1) + B1(1);
+
+julia> axiom = axiom + A1(2);
+
+julia> import CairoMakie; # or GLMakie, WGLMakie, etc.
+
+julia> draw(axiom);
 ```
 """
-+(g::StaticGraph, n::Node) = g + GraphNode(n)
+Base.:+(g::StaticGraph, n::Node) = g + GraphNode(n)
 
 """
     +(n::Node, g::StaticGraph)
@@ -95,16 +104,21 @@ Creates a graph as the result of appending the static graph `g` to the node `n`.
 
 ## Examples
 ```jldoctest
-julia>  struct A1 <: Node val::Int end
-        struct B1 <: Node val::Int end
-        axiom = A1(1) + B1(1)
-        axiom = A1(2) + axiom
-        import CairoMakie # or GLMakie, WGLMakie, etc.
-        draw(axiom);
+julia> struct A1 <: Node val::Int end;
+
+julia> struct B1 <: Node val::Int end;
+
+julia> axiom = A1(1) + B1(1);
+
+julia> axiom = A1(2) + axiom;
+
+julia> import CairoMakie; # or GLMakie, WGLMakie, etc.
+
+julia> draw(axiom);
 ```
 """
-+(n::Node, g::StaticGraph) = GraphNode(n) + g
-+(n::GraphNode, g::StaticGraph) = StaticGraph(n) + g
+Base.:+(n::Node, g::StaticGraph) = GraphNode(n) + g
+Base.:+(n::GraphNode, g::StaticGraph) = StaticGraph(n) + g
 
 """
     +(g1::StaticGraph, g2::StaticGraph)
@@ -114,22 +128,28 @@ The insertion point of the final graph corresponds to the insertion point of `g2
 
 ## Examples
 ```jldoctest
-julia> struct A1 <: Node val::Int end
-       struct B1 <: Node val::Int end
-       axiom1 = A1(1) + B1(1)
-       axiom2 = A1(2) + B1(2)
-       axiom = axiom1 + axiom2
-       import CairoMakie # or GLMakie, WGLMakie, etc.
-       draw(axiom);
+julia> struct A1 <: Node val::Int end;
+
+julia> struct B1 <: Node val::Int end;
+
+julia> axiom1 = A1(1) + B1(1);
+
+julia> axiom2 = A1(2) + B1(2);
+
+julia> axiom = axiom1 + axiom2;
+
+julia> import CairoMakie; # or GLMakie, WGLMakie, etc.
+
+julia> draw(axiom);
 ```
 """
-function +(g1::StaticGraph, g2::StaticGraph)
+function Base.:+(g1::StaticGraph, g2::StaticGraph)
     nID = append!(g1, insertion_id(g1), g2)
     update_insertion!(g1, insertion_id(g2))
     return g1
 end
 
-@unroll function +(g::StaticGraph, T::Tuple)
+@unroll function Base.:+(g::StaticGraph, T::Tuple)
     ins = insertion_id(g)
     @unroll for el in T
         g += el
@@ -138,7 +158,7 @@ end
     return g
 end
 
-+(n::GraphNode, T::Tuple) = StaticGraph(n) + T
+Base.:+(n::GraphNode, T::Tuple) = StaticGraph(n) + T
 
 """
     +(g::StaticGraph, T::Tuple)
@@ -150,11 +170,15 @@ branch.
 
 ## Examples
 ```jldoctest
-julia> struct A1 <: Node val::Int end
-       struct B1 <: Node val::Int end
-       axiom = A1(1) + (B1(1) + A1(3), B1(4))
-       import CairoMakie # or GLMakie, WGLMakie, etc.
-       draw(axiom);
+julia> struct A1 <: Node val::Int end;
+
+julia> struct B1 <: Node val::Int end;
+
+julia> axiom = A1(1) + (B1(1) + A1(3), B1(4));
+
+julia> import CairoMakie; # or GLMakie, WGLMakie, etc.
+
+julia> draw(axiom);
 ```
 """
-+(n::Node, T::Tuple) = GraphNode(n) + T
+Base.:+(n::Node, T::Tuple) = GraphNode(n) + T

@@ -29,7 +29,7 @@ function GR.DiGraph(g::StaticGraph)
     rid = root_id(g)
     posroot = findfirst(i -> i == rid, ids)
     ids = vcat(rid, ids[1:(posroot - 1)], ids[(posroot + 1):end])
-    map_ids = OrderedDict((ids[i], i) for i in 1:n)
+    map_ids = OC.OrderedDict((ids[i], i) for i in 1:n)
     # Create label for each node (user can modify behavior)
     labels = [node_label(data(g[id]), id) for id in ids]
     # Update the digraph with information collected in the above
@@ -103,11 +103,9 @@ Visualize a graph as network diagram.
 - `g::Graph`: The graph to be visualized.
 
 ## Keywords
-- `resolution = (1920, 1080)`: The resolution of the image to be rendered, in
-pixels (online relevant for native and web backends). Default resolution is HD.
+- `resolution = (1920, 1080)`: The resolution of the image to be rendered, in pixels (online relevant for native and web backends). Default resolution is HD.
 - `nlabels_textsize = 15`: Customize the size of the labels in the diagram.
-- `arrow_size = 15`: Customize the size of the arrows representing edges in the
-diagram.
+- `arrow_size = 15`: Customize the size of the arrows representing edges in the diagram.
 - `node_size = 5`: Customize the size of the nodes in the diagram.
 
 ## Details
@@ -131,12 +129,17 @@ as a side effect.
 
 ## Examples
 ```jldoctest
-julia> struct A1 <: Node val::Int end
-       struct B1 <: Node val::Int end
-       axiom = A1(1) + (B1(1) + A1(3), B1(4))
-       g = Graph(axiom = axiom)
-       import CairoMakie # or GLMakie, WGLMakie, etc.
-       draw(g);
+julia> struct A1 <: Node val::Int end;
+
+julia> struct B1 <: Node val::Int end;
+
+julia> axiom = A1(1) + (B1(1) + A1(3), B1(4));
+
+julia> g = Graph(axiom = axiom);
+
+julia> import CairoMakie; # or GLMakie, WGLMakie, etc.
+
+julia> draw(g);
 ```
 """
 function draw(g::Graph; resolution = (1920, 1080), nlabels_textsize = 15, arrow_size = 15,

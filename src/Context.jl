@@ -62,10 +62,8 @@ a rule or query.
 - `c::Context`: Context associated to a node in a dynamic graph.
 
 ## Keywords
-- `condition`: An user-defined function that takes a `Context` object as input
-and returns `true` or `false`.
-- `max_level::Int`: Maximum number of steps that the algorithm may take when
-traversing the graph.
+- `condition`: An user-defined function that takes a `Context` object as input and returns `true` or `false`.
+- `max_level::Int`: Maximum number of steps that the algorithm may take when traversing the graph.
 
 ## Details
 This function traverses the graph from the node associated to `c` towards the
@@ -89,21 +87,25 @@ the number of levels in the graph separating the node an its ancestor.
 
 ## Examples
 ```jldoctest
-julia> let
-           struct A1 <: Node val::Int end
-           struct B1 <: Node val::Int end
-           axiom = A1(2) + (B1(1) + A1(3), B1(4))
-           g = Graph(axiom = axiom)
-               function qfun(n)
-               has_ancestor(n, condition = x -> data(x).val == 1)[1]
-           end
-           Q1 = Query(A1, condition = qfun)
-           R1 = apply(g, Q1)
-               Q2 = Query(B1, condition = qfun)
-           R2 = apply(g, Q2)
-           (R1,R2)
-       end
-(A1[A1(3)], B1[])
+julia> struct A1 <: Node val::Int end;
+
+julia> struct B1 <: Node val::Int end;
+
+julia> axiom = A1(2) + (B1(1) + A1(3), B1(4));
+
+julia> g = Graph(axiom = axiom);
+
+julia> function qfun(n)
+            has_ancestor(n, condition = x -> data(x).val == 1)[1]
+       end;
+
+julia> Q1 = Query(A1, condition = qfun);
+
+julia> R1 = apply(g, Q1);
+
+julia> Q2 = Query(B1, condition = qfun);
+
+julia> R2 = apply(g, Q2);
 ```
 """
 function has_ancestor(c::Context; condition = x -> true, max_level::Int = typemax(Int))
@@ -137,10 +139,8 @@ within a rule or query.
 - `c::Context`: Context associated to a node in a dynamic graph.
 
 ## Keywords
-- `condition`: An user-defined function that takes a `Context` object as input
-and returns `true` or `false`.
-- `max_level::Int`: Maximum number of steps that the algorithm may take when
-traversing the graph.
+- `condition`: An user-defined function that takes a `Context` object as input and returns `true` or `false`.
+- `max_level::Int`: Maximum number of steps that the algorithm may take when traversing the graph.
 
 ## Details
 This function traverses the graph from the node associated to `c` towards the
@@ -164,21 +164,25 @@ the number of levels in the graph separating the node an its ancestor.
 
 ## Examples
 ```jldoctest
-julia> let
-           struct A1 <: Node val::Int end
-           struct B1 <: Node val::Int end
-           axiom = A1(2) + (B1(1) + A1(3), B1(4))
-           g = Graph(axiom = axiom)
-               function qfun(n)
-               has_descendant(n, condition = x -> data(x).val == 1)[1]
-           end
-           Q1 = Query(A1, condition = qfun)
-           R1 = apply(g, Q1)
-           Q2 = Query(B1, condition = qfun)
-           R2 = apply(g, Q2)
-           (R1,R2)
-       end
-(A1[A1(2)], B1[])
+julia> struct A1 <: Node val::Int end;
+
+julia> struct B1 <: Node val::Int end;
+
+julia> axiom = A1(2) + (B1(1) + A1(3), B1(4));
+
+julia> g = Graph(axiom = axiom);
+
+julia> function qfun(n)
+           has_descendant(n, condition = x -> data(x).val == 1)[1]
+       end;
+
+julia> Q1 = Query(A1, condition = qfun);
+
+julia> R1 = apply(g, Q1);
+
+julia> Q2 = Query(B1, condition = qfun);
+
+julia> R2 = apply(g, Q2);
 ```
 """
 function has_descendant(c::Context; condition = x -> true, max_level::Int = typemax(Int))
@@ -212,25 +216,29 @@ Return a `Context` object or `missing`.
 
 ## Examples
 ```jldoctest
-julia> let
-           struct A1 <: Node val::Int end
-           struct B1 <: Node val::Int end
-           axiom = A1(2) + (B1(1) + A1(3), B1(4))
-           g = Graph(axiom = axiom)
-               function qfun(n)
-               np = parent(n, nsteps = 2)
-               !ismissing(np) && data(np).val == 2
-           end
-           Q1 = Query(A1, condition = qfun)
-           R1 = apply(g, Q1)
-           Q2 = Query(B1, condition = qfun)
-           R2 = apply(g, Q2)
-           (R1,R2)
-       end
-(A1[A1(3)], B1[])
+julia> struct A1 <: Node val::Int end;
+
+julia> struct B1 <: Node val::Int end;
+
+julia> axiom = A1(2) + (B1(1) + A1(3), B1(4));
+
+julia> g = Graph(axiom = axiom);
+
+julia> function qfun(n)
+           np = parent(n, nsteps = 2)
+           !ismissing(np) && data(np).val == 2
+       end;
+
+julia> Q1 = Query(A1, condition = qfun);
+
+julia> R1 = apply(g, Q1);
+
+julia> Q2 = Query(B1, condition = qfun);
+
+julia> R2 = apply(g, Q2);
 ```
 """
-function parent(c::Context; nsteps::Int = 1)
+function Base.parent(c::Context; nsteps::Int = 1)
     parent_node = parent(node(c), graph(c), nsteps)
     ismissing(parent_node) && return missing
     out = Context(graph(c), parent_node)
@@ -247,10 +255,8 @@ used within a rule or query.
 - `c::Context`: Context associated to a node in a dynamic graph.
 
 ## Keywords
-- `condition`: An user-defined function that takes a `Context` object as input
-and returns `true` or `false`.
-- `max_level::Int`: Maximum number of steps that the algorithm may take when
-traversing the graph.
+- `condition`: An user-defined function that takes a `Context` object as input and returns `true` or `false`.
+- `max_level::Int`: Maximum number of steps that the algorithm may take when traversing the graph.
 
 ## Details
 If `has_ancestor()` returns `false` for the same node and `condition`, `ancestor()`
@@ -262,26 +268,30 @@ Return a `Context` object or `missing`.
 
 ## Examples
 ```jldoctest
-julia> let
-           struct A1 <: Node val::Int end
-           struct B1 <: Node val::Int end
-           axiom = A1(1) + (B1(1) + A1(3), B1(4))
-           g = Graph(axiom = axiom)
-               function qfun(n)
-               na = ancestor(n, condition = x -> (data(x).val == 1))
-               if !ismissing(na)
-                   data(na) isa B1
-               else
-                   false
-               end
+julia> struct A1 <: Node val::Int end;
+
+julia> struct B1 <: Node val::Int end;
+
+julia> axiom = A1(1) + (B1(1) + A1(3), B1(4));
+
+julia> g = Graph(axiom = axiom);
+
+julia> function qfun(n)
+           na = ancestor(n, condition = x -> (data(x).val == 1))
+           if !ismissing(na)
+               data(na) isa B1
+           else
+               false
            end
-           Q1 = Query(A1, condition = qfun)
-           R1 = apply(g, Q1)
-           Q2 = Query(B1, condition = qfun)
-           R2 = apply(g, Q2)
-           (R1,R2)
-       end
-(A1[A1(3)], B1[])
+       end;
+
+julia> Q1 = Query(A1, condition = qfun);
+
+julia> R1 = apply(g, Q1);
+
+julia> Q2 = Query(B1, condition = qfun);
+
+julia> R2 = apply(g, Q2);
 ```
 """
 function ancestor(c::Context; condition = x -> true, max_level::Int = typemax(Int))
@@ -320,10 +330,8 @@ be used within a rule or query.
 - `c::Context`: Context associated to a node in a dynamic graph.
 
 ## Keywords
-- `condition`: An user-defined function that takes a `Context` object as input
-and returns `true` or `false`.
-- `max_level::Int`: Maximum number of steps that the algorithm may take when
-traversing the graph.
+- `condition`: An user-defined function that takes a `Context` object as input and returns `true` or `false`.
+- `max_level::Int`: Maximum number of steps that the algorithm may take when traversing the graph.
 
 ## Details
 If `has_descendant()` returns `false` for the same node and `condition`,
@@ -335,26 +343,30 @@ Return a `Context` object or `missing`.
 
 ## Examples
 ```jldoctest
-julia> let
-           struct A1 <: Node val::Int end
-           struct B1 <: Node val::Int end
-           axiom = A1(1) + (B1(1) + A1(3), B1(4))
-           g = Graph(axiom = axiom)
-               function qfun(n)
-               na = get_descendant(n, condition = x -> (data(x).val == 1))
-               if !ismissing(na)
-                   data(na) isa B1
-               else
-                   false
-               end
+julia> struct A1 <: Node val::Int end;
+
+julia> struct B1 <: Node val::Int end;
+
+julia> axiom = A1(1) + (B1(1) + A1(3), B1(4));
+
+julia> g = Graph(axiom = axiom);
+
+julia> function qfun(n)
+           na = get_descendant(n, condition = x -> (data(x).val == 1))
+           if !ismissing(na)
+               data(na) isa B1
+           else
+               false
            end
-           Q1 = Query(A1, condition = qfun)
-           R1 = apply(g, Q1)
-           Q2 = Query(B1, condition = qfun)
-           R2 = apply(g, Q2)
-           (R1,R2)
-       end
-(A1[A1(1)], B1[])
+       end;
+
+julia> Q1 = Query(A1, condition = qfun);
+
+julia> R1 = apply(g, Q1);
+
+julia> Q2 = Query(B1, condition = qfun);
+
+julia> R2 = apply(g, Q2);
 ```
 """
 const get_descendant = getdescendant

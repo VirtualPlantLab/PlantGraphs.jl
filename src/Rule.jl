@@ -13,14 +13,9 @@ Create a replacement rule for nodes of type `nodetype`.
 - `nodetype`: Type of node to be matched.
 
 ## Keywords
-- `lhs`: Function or function-like object that takes a `Context` object and
-returns whether the node should be replaced or not (with `true` or `false`).
-- `rhs`: Function or function-like object that takes one or more `Context`
-objects and returns a replacement graph or `nothing`. If it takes several
-inputs, the first one will correspond to the node being replaced.
-- `captures`: Either `false` or `true` to indicate whether the left-hand side
-of the rule is capturing nodes in the context of the replacement node to be
-used for the construction of the replace graph.
+- `lhs`: Function or function-like object that takes a `Context` object and returns whether the node should be replaced or not (with `true` or `false`).
+- `rhs`: Function or function-like object that takes one or more `Context` objects and returns a replacement graph or `nothing`. If it takes several inputs, the first one will correspond to the node being replaced.
+- `captures`: Either `false` or `true` to indicate whether the left-hand side of the rule is capturing nodes in the context of the replacement node to be used for the construction of the replace graph.
 
 ## Details
 See VPL documentation for details on rule-based graph rewriting.
@@ -30,15 +25,17 @@ An object of type `Rule`.
 
 ## Examples
 ```jldoctest
-julia> let
-           struct A <: Node end
-           struct B <: Node end
-           axiom = A() + B()
-           rule = Rule(A, rhs = x -> A() + B())
-           rules_graph = Graph(axiom = axiom, rules = rule)
-           rewrite!(rules_graph)
-           end
+julia> struct A <: Node end;
 
+julia> struct B <: Node end;
+
+julia> axiom = A() + B();
+
+julia> rule = Rule(A, rhs = x -> A() + B());
+
+julia> rules_graph = Graph(axiom = axiom, rules = rule);
+
+julia> rewrite!(rules_graph);
 ```
 """
 function Rule(nodetype::DataType; lhs = x -> true, rhs = x -> nothing,
@@ -48,7 +45,7 @@ function Rule(nodetype::DataType; lhs = x -> true, rhs = x -> nothing,
 end
 
 # Remove the matches and contexts stored in a rule
-function empty!(rule::Rule)
+function Base.empty!(rule::Rule)
     empty!(rule.matched)
     empty!(rule.contexts)
     return nothing
@@ -60,7 +57,7 @@ captures(r::Rule{N, C, LHST, RHST}) where {N, C, LHST, RHST} = C
 
 # Method require to create tuple of rules from one rule (allows creating a Graph)
 # while passing one rule rather than a tuple of rules
-Tuple(r::Rule) = (r,)
+Base.Tuple(r::Rule) = (r,)
 
 ################################################################################
 ##############################  Show methods  ##################################
@@ -69,7 +66,7 @@ Tuple(r::Rule) = (r,)
 #=
   Print human-friendly description of a rule
 =#
-function show(io::IO, rule::Rule{N, LHST, RHST}) where {N, LHST, RHST}
+function Base.show(io::IO, rule::Rule{N, LHST, RHST}) where {N, LHST, RHST}
     if captures(rule)
         println(io, "Rule replacing nodes of type ", N, " with context capturing.")
     else
@@ -109,7 +106,7 @@ end
 #=
     Match a rule against a graph to identify which nodes will be replaced.
 =#
-function match_rule!(g::Graph, rule::Rule, assigned::OrderedSet{Int})
+function match_rule!(g::Graph, rule::Rule, assigned::OC.OrderedSet{Int})
     # Reset the rule
     empty!(rule)
     N = nodetype(rule)
@@ -129,7 +126,7 @@ end
   Rules is needed as argument of the function in order for @unroll to work
 =#
 @inline @unroll function match_rules!(g::Graph, rules)
-    assigned = OrderedSet{Int}()
+    assigned = OC.OrderedSet{Int}()
     # For each rule, match the nodes that meet the conditions of the query
     @unroll for rule in rules
         match_rule!(g, rule, assigned)
@@ -185,15 +182,17 @@ by the execution of the rules.
 
 # Examples
 ```jldoctest
-julia> let
-           struct A <: Node end
-           struct B <: Node end
-           axiom = A() + B()
-           rule = Rule(A, rhs = x -> A() + B())
-           g = Graph(axiom = axiom, rules = rule)
-           rewrite!(g)
-       end
+julia> struct A <: Node end;
 
+julia> struct B <: Node end;
+
+julia> axiom = A() + B();
+
+julia> rule = Rule(A, rhs = x -> A() + B());
+
+julia> g = Graph(axiom = axiom, rules = rule);
+
+julia> rewrite!(g);
 ```
 """
 rewrite!(g::Graph) = rewrite!(g, g.rules)

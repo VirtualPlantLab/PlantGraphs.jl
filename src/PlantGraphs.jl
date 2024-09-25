@@ -2,22 +2,22 @@ module PlantGraphs
 
 # Public API of PlantGraph
 export Node, Context, Graph, Rule, Query, rewrite!, apply, data, rules, graph,
-    static_graph, data, graph_data, parent, +,
-    has_parent, has_ancestor, ancestor, is_root, get_root, has_children, has_descendant,
-    children, get_descendant, is_leaf, traverse, traverse_dfs, traverse_bfs, draw,
-    calculate_resolution, node_label
+       static_graph, data, graph_data,
+       has_parent, has_ancestor, ancestor, is_root, get_root, has_children, has_descendant,
+       children, get_descendant, is_leaf, traverse, traverse_dfs, traverse_bfs, draw,
+       calculate_resolution, node_label
 
-# API for VPL-style graphs
+# API for VPL-style graphs (we export methods on these functions so we need to import names)
 import AbstractTrees: isroot, getroot, children, getdescendant
 
-# Base functions that will be extended
-import Base: copy, length, empty!, append!, +, getindex, setindex!, show, Tuple, parent
+# Import Base to define methods (see list in comment)
+import Base #copy, length, empty!, append!, +, getindex, setindex!, show, Tuple, parent
 
-# To unroll the loop over rules or queries
+# To unroll the loop over rules or queries (we must import the macro for it to work)
 import Unrolled: @unroll
 
 # Use ordered collections for reproducibility
-import OrderedCollections: OrderedSet, OrderedDict
+import OrderedCollections as OC
 
 # External libraries for drawing graphs
 import Graphs as GR

@@ -56,8 +56,8 @@ end
     Facilitate construction of static graphs without having to use the DSL
 =#
 function StaticGraph()
-    StaticGraph(OrderedDict{Int, GraphNode}(),
-        OrderedDict{DataType, OrderedSet{Int}}(),
+    StaticGraph(OC.OrderedDict{Int, GraphNode}(),
+        OC.OrderedDict{DataType, OC.OrderedSet{Int}}(),
         -1,
         -1)
 end
@@ -65,8 +65,8 @@ function StaticGraph(n::GraphNode)
     ID = generate_id()
     change_id!(n, ID)
     nlocal = copy(n)
-    g = StaticGraph(OrderedDict{Int, GraphNode}(ID => nlocal),
-        OrderedDict(typeof(nlocal.data) => OrderedSet{Int}(ID)),
+    g = StaticGraph(OC.OrderedDict{Int, GraphNode}(ID => nlocal),
+        OC.OrderedDict(typeof(nlocal.data) => OC.OrderedSet{Int}(ID)),
         ID, ID)
     return g
 end
@@ -83,7 +83,7 @@ Nodetypes
 nodetypes(g) = g.nodetypes
 has_nodetype(g::StaticGraph, T) = haskey(g.nodetypes, T)
 function add_nodetype!(g::StaticGraph, T, ID)
-    !has_nodetype(g, T) && (g.nodetypes[T] = OrderedSet{Int}())
+    !has_nodetype(g, T) && (g.nodetypes[T] = OC.OrderedSet{Int}())
     push!(g.nodetypes[T], ID)
     return nothing
 end
@@ -105,7 +105,7 @@ getroot(g::StaticGraph) = g[root_id(g)]
 
 Extract the root node of a graph.
 
-`getroot` is an alias for `get_root` for compatibility with AbstractTrees.jl
+You may also use `getroot` (for compatibility with AbstractTrees.jl).
 """
 const get_root = getroot
 
@@ -121,7 +121,7 @@ GraphNode
 =#
 nodes(g::StaticGraph) = g.nodes
 has_node(g::StaticGraph, ID) = haskey(g.nodes, ID)
-length(g::StaticGraph) = length(g.nodes)
+Base.length(g::StaticGraph) = length(g.nodes)
 remove_node!(g::StaticGraph, ID) = delete!(g.nodes, ID)
 
 #=
@@ -130,8 +130,8 @@ remove_node!(g::StaticGraph, ID) = delete!(g.nodes, ID)
     Update the nodetypes list if the GraphNode introduces a new data type into the graph
     Copy the node rather than keeping a reference to it (the user data is not copied)
 =#
-getindex(g::StaticGraph, ID::Int) = g.nodes[ID]
-function setindex!(g::StaticGraph, n::GraphNode{T}, ID) where {T}
+Base.getindex(g::StaticGraph, ID::Int) = g.nodes[ID]
+function Base.setindex!(g::StaticGraph, n::GraphNode{T}, ID) where {T}
     cn = copy(n)
     g.nodes[ID] = cn
     change_id!(cn, ID)
@@ -140,7 +140,7 @@ function setindex!(g::StaticGraph, n::GraphNode{T}, ID) where {T}
 end
 
 # Empty a graph
-function empty!(g::StaticGraph)
+function Base.empty!(g::StaticGraph)
     empty!(g.nodes)
     empty!(g.nodetypes)
     return nothing
