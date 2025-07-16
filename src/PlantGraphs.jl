@@ -5,7 +5,8 @@ export Node, Context, Graph, Rule, Query, rewrite!, apply, data, rules, graph,
        static_graph, data, graph_data,
        has_parent, has_ancestor, ancestor, is_root, get_root, has_children, has_descendant,
        children, get_descendant, is_leaf, traverse, traverse_dfs, traverse_bfs, draw,
-       calculate_resolution, node_label
+       calculate_resolution, node_label,
+       generate_id, get_id!, reset_id!, set_id!
 
 # API for VPL-style graphs (we export methods on these functions so we need to import names)
 import AbstractTrees: isroot, getroot, children, getdescendant
