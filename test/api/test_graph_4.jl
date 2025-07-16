@@ -39,4 +39,9 @@ let
     @test apply(pop, Query(GT.ACell))[1].state == 3
     @test apply(pop, Query(GT.CCell))[1].state == 1
     @test apply(pop, Query(GT.BCell))[1].state == 2
+
+    # Test in-place apply
+    output = GT.ACell[]
+    apply!(output, pop, Query(GT.ACell))
+    @test output[1].state == 3
 end

@@ -1,7 +1,7 @@
 module PlantGraphs
 
 # Public API of PlantGraph
-export Node, Context, Graph, Rule, Query, rewrite!, apply, data, rules, graph,
+export Node, Context, Graph, Rule, Query, rewrite!, apply, apply!, data, rules, graph,
        static_graph, data, graph_data,
        has_parent, has_ancestor, ancestor, is_root, get_root, has_children, has_descendant,
        children, get_descendant, is_leaf, traverse, traverse_dfs, traverse_bfs, draw,

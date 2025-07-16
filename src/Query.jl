@@ -96,3 +96,38 @@ function apply(g::Graph, query::Query{N, Q})::Vector{N} where {Q, N}
     end
     return output
 end
+
+
+"""
+    apply!(output, g::Graph, query::Query)
+
+Fill an array `output` with all the nodes in the graph that match the query supplied by
+the user.
+
+# Examples
+```jldoctest
+julia> struct A <: Node end;
+
+julia> struct B <: Node end;
+
+julia> axiom = A() + B();
+
+julia> g = Graph(axiom = axiom);
+
+julia> output = A[];
+
+julia> query = Query(A);
+
+julia> apply!(output, g, query);
+```
+"""
+function apply!(output, g::Graph, query::Query{N, Q})::Vector{N} where {Q, N}
+    !has_nodetype(static_graph(g), N) && (return N[])
+    candidates = nodetypes(g)[N]
+    for id in candidates
+        if query.query(Context(g, g[id]))
+            push!(output, g[id].data::N)
+        end
+    end
+    return output
+end
