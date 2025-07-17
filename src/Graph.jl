@@ -101,6 +101,20 @@ data(g::Graph) = g.data
 Returns the StaticGraph stored inside the Graph object (users are not supposed
 to interact directly with the StaticGraph)
 =#
+
+
+
+"""
+    static_graph(g::Graph)
+
+Return the internal `StaticGraph` stored inside a dynamic `Graph` object.
+
+## Arguments
+- `g::Graph`: The dynamic graph from which to retrieve the internal static graph.
+
+## Returns
+The `StaticGraph` object contained within the dynamic graph.
+"""
 static_graph(g::Graph) = g.graph
 
 ################################################################################

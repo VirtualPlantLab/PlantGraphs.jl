@@ -15,6 +15,21 @@ Returns the data stored in a node. Intended to be used within a rule or query.
 data(c::Context) = data(node(c))
 
 # Return the Graph stored inside the Context object
+
+
+
+"""
+    graph(c::Context)
+
+Returns the dynamic graph stored inside a `Context` object. Intended to be used within a
+rule or query.
+
+## Arguments
+- `c::Context`: The context associated to a node in a dynamic graph.
+
+## Returns
+The `Graph` object contained in the context.
+"""
 graph(c::Context) = c.graph
 
 """
@@ -25,6 +40,20 @@ Returns the graph-level variables. Intended to be used within a rule or query.
 graph_data(c::Context) = data(graph(c))
 
 # This is needed to traverse graphs within rules
+
+
+"""
+    id(c::Context)
+
+Returns the unique identifier (ID) of the node stored in a `Context` object. Intended to be
+used within a rule or query.
+
+## Arguments
+- `c::Context`: The context associated to a node in a dynamic graph.
+
+## Returns
+The integer ID of the node contained in the context.
+"""
 id(c::Context) = self_id(node(c))
 
 ################################################################################
@@ -39,6 +68,20 @@ within a rule or query.
 """
 has_parent(c::Context) = has_parent(node(c))
 
+
+
+"""
+    isroot(c::Context)
+
+Check if a node is the root of the graph (i.e., has no parent) and return `true` or `false`.
+    Intended to be used within a rule or query.
+
+## Arguments
+- `c::Context`: The context associated to a node in a dynamic graph.
+
+## Returns
+`true` if the node is the root of the graph, otherwise `false`.
+"""
 isroot(c::Context) = !has_parent(c)
 
 """
@@ -311,6 +354,27 @@ function children(c::Context)
     return out
 end
 
+
+
+"""
+    getdescendant(c::Context; condition = x -> true, max_level::Int = typemax(Int))
+
+Returns the first descendant of a node that matches the `condition`. Intended to be used
+within a rule or query.
+
+## Arguments
+- `c::Context`: Context associated to a node in a dynamic graph.
+
+## Keywords
+- `condition`: An user-defined function that takes a `Context` object as input and returns `true` or `false`.
+- `max_level::Int`: Maximum number of steps that the algorithm may take when traversing the graph.
+
+## Details
+This function traverses the graph from the node associated to `c` towards the leaves of the graph until a node is found for which `condition` returns `true`. If no node meets the condition, then it will return `missing`.
+
+## Returns
+Return a `Context` object or `missing`.
+"""
 function getdescendant(c::Context; condition = x -> true, max_level::Int = typemax(Int))
     desc = getdescendant(node(c), graph(c), condition, max_level, 1)
     ismissing(desc) && return missing

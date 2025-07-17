@@ -19,6 +19,24 @@ Translate a static graph in a DiGraph to be used by GraphMakie. Nodes are
 labelled, edges are not. The translation extracts the topological relationships
 among nodes and the result of applying `node_label` to each node.
 =#
+
+
+"""
+    GR.DiGraph(g::StaticGraph)
+
+Translate a static graph into a directed graph (DiGraph) structure for visualization with
+    GraphMakie. Nodes are labelled using `node_label`, and edges represent parent-child
+    relationships.
+
+## Arguments
+- `g::StaticGraph`: The static graph to be translated into a DiGraph.
+
+## Returns
+A tuple `(dg, labels, n)` where:
+- `dg`: The constructed DiGraph object.
+- `labels`: An array of labels for each node.
+- `n`: The number of nodes in the graph.
+"""
 function GR.DiGraph(g::StaticGraph)
     # Create a DiGraph structure
     n = length(g)
@@ -46,6 +64,24 @@ function GR.DiGraph(g::StaticGraph)
 end
 
 # Forward the DiGraph method of StaticGraph onto Graph
+
+
+"""
+    GR.DiGraph(g::Graph)
+
+Translate a dynamic `Graph` object into a directed graph (DiGraph) structure for
+    visualization with GraphMakie. This method forwards the translation to the underlying
+    static graph contained in the `Graph` object.
+
+## Arguments
+- `g::Graph`: The dynamic graph to be translated into a DiGraph.
+
+## Returns
+A tuple `(dg, labels, n)` where:
+- `dg`: The constructed DiGraph object.
+- `labels`: An array of labels for each node.
+- `n`: The number of nodes in the graph.
+"""
 GR.DiGraph(g::Graph) = GR.DiGraph(g.graph)
 
 """

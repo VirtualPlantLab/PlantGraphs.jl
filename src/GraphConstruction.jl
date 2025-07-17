@@ -4,18 +4,39 @@
 ################  Add/Append methods for graph construction  ###################
 ################################################################################
 
-#=
-Add a new node to the graph (an unique ID is automatically created).
-=#
+
+"""
+    add!(g::StaticGraph, N::GraphNode)
+
+Add a new node to a static graph, automatically generating a unique ID for the node.
+
+## Arguments
+- `g::StaticGraph`: The static graph to which the node will be added.
+- `N::GraphNode`: The node to add to the graph.
+
+## Returns
+The unique ID assigned to the newly added node.
+"""
 function add!(g::StaticGraph, N::GraphNode)
     ID = generate_id()
     g[ID] = N
     return ID
 end
 
-#=
-Append a node to the node ID in a graph
-=#
+
+"""
+    append!(g::StaticGraph, ID, n::GraphNode)
+
+Append a node to a specified node in a static graph.
+
+## Arguments
+- `g::StaticGraph`: The static graph to which the node will be appended.
+- `ID`: The ID of the node to which the new node will be appended as a child.
+- `n::GraphNode`: The node to append to the graph.
+
+## Returns
+The unique ID assigned to the newly appended node.
+"""
 function Base.append!(g::StaticGraph, ID, n::GraphNode)
     nID = add!(g, n)
     add_child!(g[ID], nID)
@@ -23,10 +44,21 @@ function Base.append!(g::StaticGraph, ID, n::GraphNode)
     return nID
 end
 
-#=
-Append a graph to the node ID in a graph. The insertion point of the final graph
-is the insertion point of the appended graph
-=#
+
+"""
+    append!(g::StaticGraph, ID, gn::StaticGraph)
+
+Append a static graph to a specified node in another static graph. The insertion point of 
+the final graph is the insertion point of the appended graph.
+
+## Arguments
+- `g::StaticGraph`: The static graph to which the other graph will be appended.
+- `ID`: The ID of the node to which the root of the appended graph will be added as a child.
+- `gn::StaticGraph`: The static graph to append.
+
+## Returns
+The ID of the insertion point of the appended graph.
+"""
 function Base.append!(g::StaticGraph, ID, gn::StaticGraph)
     # Transfer nodes to the receiving graph
     for (key, val) in nodes(gn)
@@ -42,6 +74,20 @@ end
 #######################  StaticGraph construction DSL  ###############################
 ################################################################################
 
+
+"""
+    +(n1::GraphNode, n2::GraphNode)
+
+Create a static graph with two nodes, where `n1` is the root and `n2` is appended as a 
+child at the insertion point.
+
+## Arguments
+- `n1::GraphNode`: The node to use as the root of the graph.
+- `n2::GraphNode`: The node to append to the root node.
+
+## Returns
+A `StaticGraph` object with `n1` as the root and `n2` as the insertion point.
+"""
 function Base.:+(n1::GraphNode, n2::GraphNode)
     g = StaticGraph(n1)
     nID = append!(g, insertion_id(g), n2)
@@ -149,6 +195,19 @@ function Base.:+(g1::StaticGraph, g2::StaticGraph)
     return g1
 end
 
+
+"""
+    +(g::StaticGraph, T::Tuple)
+
+Creates a graph as the result of appending a tuple of graphs or nodes `T` to the insertion point of the static graph `g`. Each element in the tuple becomes a branch.
+
+## Arguments
+- `g::StaticGraph`: The static graph to which the tuple will be appended.
+- `T::Tuple`: A tuple of graphs or nodes to append as branches.
+
+## Returns
+The modified `StaticGraph` with all elements of the tuple appended as branches.
+"""
 @unroll function Base.:+(g::StaticGraph, T::Tuple)
     ins = insertion_id(g)
     @unroll for el in T
@@ -158,6 +217,20 @@ end
     return g
 end
 
+
+
+"""
+    +(n::GraphNode, T::Tuple)
+
+Creates a static graph as the result of appending a tuple of graphs or nodes `T` to the insertion point of the graph rooted at `n`. Each element in the tuple becomes a branch.
+
+## Arguments
+- `n::GraphNode`: The node to use as the root of the graph.
+- `T::Tuple`: A tuple of graphs or nodes to append as branches.
+
+## Returns
+A `StaticGraph` with `n` as the root and all elements of the tuple appended as branches.
+"""
 Base.:+(n::GraphNode, T::Tuple) = StaticGraph(n) + T
 
 """

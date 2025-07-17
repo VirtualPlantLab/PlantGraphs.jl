@@ -6,7 +6,9 @@
 Abstract type from which every node in a graph should inherit. This allows using
 the graph construction DSL.
 
-# Example
+This type is mutable.
+
+## Example
 ```jldoctest
 julia> struct bar <: Node
            x::Int
@@ -21,16 +23,24 @@ julia> b1 + b2;
 """
 abstract type Node end
 
-#=
-  GraphNode{T}
+
+"""
+    GraphNode
 
 Data structure that wraps the contents of a node and includes references to the
-ids of the parent and children node and the node itself. These IDs are used to
-traverse the graph and guide relational queries. The type parameter `T` corresponds
-to the type of data stored in the node (defined by the user). User do not  build
-build `GraphNode` objects directly, this is always handled by VPL when creating
-or modifying a graph.
-=#
+ids of the parent and children node and the node itself. Users do not build `GraphNode`
+objects directly, this is always handled by VPL when creating or modifying a graph.
+
+This type is mutable. All fields can be accessed through methods with the same name as the
+field.
+
+## Fields
+- `data`: Data stored in the node, which should inherit from `Node` (i.e., the object the
+            user creates).
+- `children_id::OrderedSet{Int}`: Ids of the children nodes.
+- `parent_id::Union{Int, Missing}`: Id of the parent node. If the node is a root node, this is `missing`.
+- `self_id::Int`: Id of this node.
+"""
 mutable struct GraphNode{T <: Node}
     data::T
     children_id::OC.OrderedSet{Int}
@@ -38,16 +48,28 @@ mutable struct GraphNode{T <: Node}
     self_id::Int
 end
 
-#=
-  StaticGraph
 
-Data structure to store a collection of nodes that are related to each other
-though a graph. Unlike objects of type `Graph`, a `StaticGraph` does not contain
-rules or graph-level variables.
+"""
+    StaticGraph
 
-Users do not build `StaticGraph` objects directly but rather they are created by
-VPL through the graph construction DSL (see User Manual for details).
-=#
+Data structure that stores the nodes in a graph and their relationships. Each node is
+assigned a unique id which corresponds to the key in a Dictionary. Each node is of type
+`GraphNode`, which contains the data stored in the node, as well as references to its
+parent and children nodes. A `StaticGraph` is combined with a set of rules and data to
+form a `Graph` object, which is the main data structure used in VPL. Users will generally
+not interact with `StaticGraph` objects directly, as they are created by VPL through the
+graph construction DSL.
+
+This type is mutable. The fields can be accessed through methods with the same name as the
+field except for `root` where `getroot()` or `get_root()` should be used.
+
+## Fields
+- `nodes::OrderedDict{Int, GraphNode}`: Dictionary mapping node ids to `GraphNode` objects.
+- `nodetypes::OrderedDict{DataType, OrderedSet{Int}}`: Dictionary mapping node types to sets of node ids.
+- `root::Int`: Id of the root node in the graph.
+- `insertion::Int`: Id of the last node added to the graph.
+"""
+
 mutable struct StaticGraph
     nodes::OC.OrderedDict{Int, GraphNode}
     nodetypes::OC.OrderedDict{DataType, OC.OrderedSet{Int}}
