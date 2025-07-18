@@ -78,7 +78,7 @@ julia> traverse(g, fun = f, order = "dfs");
 julia> traverse(g, fun = f, order = "bfs");
 ```
 """
-function traverse(g::StaticGraph; fun = () -> nothing, order = "any", ID = root_id(g))
+function traverse(g::Graph; fun = () -> nothing, order = "any", ID = root_id(g))
     traverse(static_graph(g), fun = fun, order = order, ID = ID)
 end
 
