@@ -2,6 +2,10 @@
 
 We started keeping track of changes in the `NEWS.md` file after version 0.1.0.
 
+# PlantGraphs 0.1.2 (2026-01-14)
+
+* Update dependencies and ensure it works on Julia 1.12
+
 # PlantGraphs 0.1.2 (2025-07-18)
 
 * Bug fix in the definitions `traverse`
